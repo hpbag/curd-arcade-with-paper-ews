@@ -43,3 +43,5 @@ sitemap*.xml
 
 # TS
 *.tsbuildinfo
+
+.env
