@@ -1,12 +1,12 @@
 import {
   Box,
   Button,
+  Flex,
   Heading,
   Image,
-  Text,
   Link as ChakraLink,
+  Text,
   useColorMode,
-  Flex,
 } from "@chakra-ui/react";
 import { NextSeo } from "next-seo";
 import Link from "next/link";

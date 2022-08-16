@@ -1,5 +1,5 @@
 {
-  "name": "nextarter-chakra",
+  "name": "curd-arcade",
   "version": "0.1.0",
   "private": true,
   "author": "sozonome",
@@ -30,8 +30,6 @@
     "react-icons": "^4.4.0"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^17.0.3",
-    "@commitlint/cz-commitlint": "^17.0.3",
     "@types/react": "^18.0.17",
     "commitizen": "^4.2.5",
     "commitlint": "^17.0.3",
