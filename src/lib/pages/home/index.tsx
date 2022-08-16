@@ -3,21 +3,9 @@ import type { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 
+import { GameStats } from "lib/components/gameStats/gameStats";
 import MotionBox from "lib/components/motion/Box";
 import { BASE_URL } from "lib/constants/routes";
-
-const GameStats = () => {
-  return (
-    <Box w="100%">
-      <Text fontWeight="bold" fontSize="md">
-        Prize Pool
-      </Text>
-      <Text fontWeight="bold" fontSize="md">
-        Total Participants
-      </Text>
-    </Box>
-  );
-};
 
 const Home = () => {
   const router = useRouter();
@@ -63,7 +51,7 @@ const Home = () => {
           >
             <Image src="/android-chrome-192x192.png" w={32} />
             <Heading as="h2">BuildSpace Flap Off</Heading>
-            <GameStats />{" "}
+            <GameStats />
           </Flex>
         </Box>
       </Flex>

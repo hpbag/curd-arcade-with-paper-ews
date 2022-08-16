@@ -1,14 +1,17 @@
 import { Box, Button, Flex, Heading, Image, Text } from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
 
+import { GameStats } from "lib/components/gameStats/gameStats";
+
 const Tournament = () => {
   return (
     <Flex flexDirection="column">
-      <Heading>The BuildSpace Flap Off:</Heading>
-      <Heading fontSize="2xl">Prize Pool - $33.66</Heading>
-      <Heading fontSize="2xl">Total Participants - 2</Heading>
+      <Heading fontSize="2xl" pb={2}>
+        The BuildSpace Flap Off:
+      </Heading>
+      <GameStats />
       <br />
-      <Heading fontSize="2xl" textAlign="center">
+      <Heading fontSize="2xl" textAlign="center" py={4}>
         Choose Your characters
       </Heading>
       <Flex
