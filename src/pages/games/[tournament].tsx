@@ -9,6 +9,10 @@ const Tournament = () => {
       <Heading fontSize="2xl" pb={2}>
         The BuildSpace Flap Off:
       </Heading>
+      <Heading fontWeight="bold" fontSize="2xl">
+        Stand to win up to 3x!
+      </Heading>
+      <Text mb={2}>42% of players make more than they paid 👀</Text>
       <GameStats />
       <br />
       <Heading fontSize="2xl" textAlign="center" py={4}>
@@ -24,7 +28,7 @@ const Tournament = () => {
       >
         <Box>
           <Image src="/buildspace.png" w={60} />
-          <Heading fontSize="xl">Buildspace Unicorn</Heading>
+          <Heading fontSize="xl">Buildspace</Heading>
 
           <Button
             variant="solid"
@@ -91,6 +95,7 @@ const Tournament = () => {
           </Button>
         </Box>
       </Flex>
+      <br />
       <Heading fontSize="2xl">Game Goes live in</Heading>
       <Text>1 Day</Text>
     </Flex>
