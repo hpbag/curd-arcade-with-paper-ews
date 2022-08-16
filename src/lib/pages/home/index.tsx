@@ -61,7 +61,7 @@ const Home = () => {
             flexDirection="column"
             alignItems="center"
           >
-            <Image src="/android-chrome-192x192.png" w={32} />
+            <Image src="/buildspace.png" w={32} />
             <Heading as="h2">BuildSpace Flap Off</Heading>
             <GameStats />{" "}
           </Flex>
