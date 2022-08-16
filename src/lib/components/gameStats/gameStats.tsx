@@ -14,7 +14,7 @@ export const GameStats = () => {
   useEffect(() => {
     const getData = async () => {
       const fetchBalance = await token?.balanceOf(
-        "0xC50Ee7a95AEcEb509f305AAff326481001A5D5b6"
+        "0x61c66721D9094DA3ceCED0F2C52c36c3AE94A319"
       );
       const tokenOneSupply =
         (await editionDrop?.totalSupply(0)) || ethers.BigNumber.from(0);
