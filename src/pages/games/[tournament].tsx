@@ -8,7 +8,7 @@ const Tournament = () => {
       <Heading fontSize="2xl">Prize Pool - $33.66</Heading>
       <Heading fontSize="2xl">Total Participants - 2</Heading>
       <br />
-      <Heading fontSize="2xl" textDecoration="underline">
+      <Heading fontSize="2xl" textAlign="center">
         Choose Your characters
       </Heading>
       <Flex
