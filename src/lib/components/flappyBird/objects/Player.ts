@@ -70,11 +70,12 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
       (this.scene.input.activePointer.isDown && !this.isFlapping)
     ) {
       // flap
-      if (this.scene.input.activePointer.isDown) {
-        this.setVelocityY(-500);
-      } else {
-        this.setVelocityY(-300);
-      }
+      // if (this.scene.input.activePointer.isDown) {
+      //   this.setVelocityY(-500);
+      // } else {
+      //   this.setVelocityY(-300);
+      // }
+      this.setVelocityY(-300);
       this.isFlapping = true;
       this.flap();
     } else if (
