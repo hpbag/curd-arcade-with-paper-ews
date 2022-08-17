@@ -1,4 +1,5 @@
 import { GAME_HEIGHT, GAME_WIDTH } from "lib/constants/phaserConsts";
+import { BASE_URL } from "lib/constants/routes";
 
 import { Pipe } from "./objects/Pipe";
 import { PlayerSprite } from "./objects/Player";
@@ -12,16 +13,16 @@ export default class GameScene extends Phaser.Scene {
 
   private player!: PlayerSprite;
 
-  private skin: string;
+  private skin = "";
 
   constructor() {
     super("GAME_SCENE");
-    // SET SKIN HERE // "buildspace" | "farza" | "hans" | "winston"
-    this.skin = "buildspace";
   }
 
-  init() {
+  init({ skin }: { skin: string }) {
     this.registry.set("score", -1);
+    // SET SKIN HERE // "buildspace" | "farza" | "hans" | "winston"
+    this.skin = skin;
   }
 
   create() {
@@ -101,7 +102,7 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
-  override update() {
+  override async update() {
     if (!this.player) {
       // todo: Show some loading screen
       return;
@@ -132,8 +133,24 @@ export default class GameScene extends Phaser.Scene {
         },
         this
       );
-
-      window.location.assign("http://localhost:3000/leader-board/flap-space");
+      const resp = await fetch("/api/game-over", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          score: Buffer.from(
+            this.registry.values.score.toString(),
+            "utf-8"
+          ).toString("base64"),
+        }),
+        credentials: "include",
+      });
+      if (resp.ok) {
+        window.location.assign(`${BASE_URL}/leader-board/flap-space`);
+      } else {
+        console.log("Error", (await resp.json()).error);
+      }
       this.scene.stop();
     }
     this.player.update();
