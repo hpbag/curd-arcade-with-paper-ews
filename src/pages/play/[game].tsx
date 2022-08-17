@@ -1,5 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
+import { useGame } from "lib/components/flappyBird/useGame";
 import { getAssetUrl, getNftHoldings } from "lib/utils/getNftHoldings";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 import { GAME, isNewUser } from "lib/utils/redis";
@@ -7,6 +8,7 @@ import { GAME, isNewUser } from "lib/utils/redis";
 const FlapSpacePage = ({
   imageLink,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  useGame();
   return <div id="game-container" datatype={imageLink} />;
 };
 
@@ -40,6 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     }
     const assetUrl = getAssetUrl(nfts);
+    console.log(assetUrl);
     return { props: { imageLink: assetUrl } };
   } catch (e) {
     return {
