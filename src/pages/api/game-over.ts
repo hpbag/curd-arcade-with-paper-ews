@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
@@ -19,26 +18,26 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const address = await getAddressFromCookies(req.cookies);
 
   // Get signed login payload from the frontend
-  const payload = req.body.payload as { signature: string; score: number };
+  const payload = req.body as { score: string };
   if (!payload) {
     return res.status(400).json({
       error: "Must provide a login payload to generate a token",
     });
   }
+  const score = Buffer.from(payload.score, "base64").toString("utf-8");
 
+  console.log("score", score);
   try {
-    const signedAddress = ethers.utils.verifyMessage(
-      `score: ${payload.score}`,
-      payload.signature
-    );
-    if (signedAddress !== address) {
-      return res.status(400).json("Invalid Authorization");
-    }
     const handle = await getUserTwitterHandle(address);
     if (!handle) {
       throw new Error("Missing handle");
     }
-    const resp = await setLeaderScore(GAME, TOURNAMENT, handle, payload.score);
+    const resp = await setLeaderScore(
+      GAME,
+      TOURNAMENT,
+      handle,
+      parseInt(score, 10)
+    );
 
     return res.status(200).json({ resp });
   } catch (e) {

@@ -133,8 +133,24 @@ export default class GameScene extends Phaser.Scene {
         },
         this
       );
-
-      window.location.assign(`${BASE_URL}/leader-board/flap-space`);
+      const resp = await fetch("/api/game-over", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          score: Buffer.from(
+            this.registry.values.score.toString(),
+            "utf-8"
+          ).toString("base64"),
+        }),
+        credentials: "include",
+      });
+      if (resp.ok) {
+        window.location.assign(`${BASE_URL}/leader-board/flap-space`);
+      } else {
+        console.log("Error", (await resp.json()).error);
+      }
       this.scene.stop();
     }
     this.player.update();
