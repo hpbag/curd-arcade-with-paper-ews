@@ -25,6 +25,7 @@ const Tournament = () => {
         }}
         alignItems={{ base: "center", md: "unset" }}
         gap={5}
+        pb={5}
       >
         <Box>
           <Image src="/buildspace.png" w={60} />
@@ -96,8 +97,8 @@ const Tournament = () => {
         </Box>
       </Flex>
       <br />
-      <Heading fontSize="2xl">Game Goes live in</Heading>
-      <Text>1 Day</Text>
+      <Heading fontSize="2xl">Game Goes Live Time:</Heading>
+      <Text>Sometime Tomorrow, look out for the message on Whatsapp!</Text>
     </Flex>
   );
 };
