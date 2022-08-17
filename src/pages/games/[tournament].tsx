@@ -29,6 +29,16 @@ const Tournament = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const toast = useToast();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.replace(router.asPath);
+    }, 10000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [router]);
+
   useEffect(() => {
     if (router.query.message) {
       toast({

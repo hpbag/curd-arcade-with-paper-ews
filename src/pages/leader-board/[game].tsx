@@ -2,6 +2,7 @@ import { Button, Stack } from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import type { ComponentProps } from "react";
+import { useEffect } from "react";
 
 import { Board } from "lib/pages/leader-board/board";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
@@ -18,6 +19,16 @@ export default function LeaderBoard({
   user,
 }: ComponentProps<typeof Board>) {
   const router = useRouter();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.replace(router.asPath);
+    }, 10000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [router]);
+
   return (
     <Stack alignItems="center" gap={8}>
       <Board rows={rows} user={user} game="Flap Bird" />
@@ -45,6 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       throw new Error("Missing handle");
     }
     const { rank, score } = await getUserScoreAndRank(GAME, TOURNAMENT, handle);
+    console.log("rank,score", rank, score);
     const result = await getTopXScores(
       GAME,
       TOURNAMENT,
