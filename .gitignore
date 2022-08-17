@@ -45,3 +45,4 @@ sitemap*.xml
 *.tsbuildinfo
 
 .env
+dumb.rdb

@@ -1,9 +1,20 @@
-import { Box, Button, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Link,
+  Text,
+} from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
+import { useState } from "react";
 
 import { GameStats } from "lib/components/gameStats/gameStats";
 
 const Tournament = () => {
+  const [isLive] = useState(true);
+
   return (
     <Flex flexDirection="column">
       <Heading fontSize="2xl" pb={2}>
@@ -98,7 +109,11 @@ const Tournament = () => {
       </Flex>
       <br />
       <Heading fontSize="2xl">Game Goes Live Time:</Heading>
-      <Text>Sometime Tomorrow, look out for the message on Whatsapp!</Text>
+      {isLive ? (
+        <Link href="/play/flap-space">Play Now</Link>
+      ) : (
+        <Text>Sometime Tomorrow, look out for the message on Whatsapp!</Text>
+      )}
     </Flex>
   );
 };
