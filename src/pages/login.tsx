@@ -26,8 +26,10 @@ export default function Login() {
   const signInWithEthereum = async () => {
     setIsLoading(true);
     await connectWithMetamask();
-    await login();
-    if (router.query.redirect) {
+    const result = await login();
+    if (result.newUser) {
+      router.push(`/onboard?redirect=${router.query.redirect}`);
+    } else if (router.query.redirect) {
       router.push(new URL(router.query.redirect as string, BASE_URL));
     } else {
       toast({

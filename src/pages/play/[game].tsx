@@ -1,7 +1,8 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 import { getAssetUrl, getNftHoldings } from "lib/utils/getNftHoldings";
-import { getAddressFromReq } from "lib/utils/getWalletFromReq";
+import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
+import { isNewUser } from "lib/utils/redis";
 
 const FlapSpacePage = ({
   imageLink,
@@ -15,14 +16,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (context.params?.game !== "flap-space") {
     return { notFound: true };
   }
+  const pathToComeBackTo = encodeURIComponent(context.req.url || "");
 
   try {
-    const address = await getAddressFromReq(context.req.cookies);
+    const address = await getAddressFromCookies(context.req.cookies);
+    if (await isNewUser(address)) {
+      return {
+        redirect: {
+          destination: `/onboard?redirect=${pathToComeBackTo}`,
+          permanent: false,
+        },
+      };
+    }
     const nfts = await getNftHoldings(address);
     const assetUrl = getAssetUrl(nfts);
     return { props: { imageLink: assetUrl } };
   } catch (e) {
-    const pathToComeBackTo = encodeURIComponent(context.req.url || "");
     return {
       redirect: {
         destination: `/login?redirect=${pathToComeBackTo}`,

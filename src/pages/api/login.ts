@@ -3,6 +3,8 @@ import type { LoginPayload } from "@thirdweb-dev/sdk/dist/src/schema";
 import { serialize } from "cookie";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import { isNewUser } from "lib/utils/redis";
+
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
     return res.status(400).json({
@@ -24,6 +26,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Get signed login payload from the frontend
   const payload = req.body.payload as LoginPayload;
+
   if (!payload) {
     return res.status(400).json({
       error: "Must provide a login payload to generate a token",
@@ -46,7 +49,11 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     })
   );
 
-  return res.status(200).json("Successfully logged in.");
+  if (await isNewUser(payload.payload.address)) {
+    return res.status(200).json({ newUser: true });
+  }
+
+  return res.status(200).json({ newUser: false });
 };
 
 export default login;

@@ -51,7 +51,7 @@ export const GameStats = () => {
   }
 
   return (
-    <Box w="100%">
+    <Box>
       <Text fontWeight="bold" fontSize="md">
         Prize Pool : {!prizePool ? <Spinner /> : prizePool}
       </Text>

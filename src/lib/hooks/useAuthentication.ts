@@ -6,13 +6,17 @@ export default function useAuthenticate() {
 
   async function login() {
     const payload = await sdk?.auth.login(domain);
-    await fetch("/api/login", {
+    const result = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ payload }),
     });
+    if (!result.ok) {
+      return result.text();
+    }
+    return result.json();
   }
 
   async function authenticate() {

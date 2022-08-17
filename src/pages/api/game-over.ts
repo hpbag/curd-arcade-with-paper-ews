@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { getAddressFromReq } from "lib/utils/getWalletFromReq";
+import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -10,7 +10,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  const address = await getAddressFromReq(req.cookies);
+  const address = await getAddressFromCookies(req.cookies);
 
   // Get signed login payload from the frontend
   const payload = req.body.payload as { signature: string; score: number };
@@ -25,7 +25,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     if (signedAddress !== address) {
       return res.status(400).json("Invalid Authorization");
     }
-    return res.status(200).json({ message: "OK" });
+    return res.status(200).json({ message: "OKp" });
   } catch (e) {
     return res.status(400).json({ error: "Invalid Signature" });
   }
