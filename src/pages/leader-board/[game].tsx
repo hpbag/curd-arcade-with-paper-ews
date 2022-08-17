@@ -1,8 +1,8 @@
-import { Button, Stack } from "@chakra-ui/react";
+import { Button, Link, Stack } from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import type { ComponentProps } from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { Board } from "lib/pages/leader-board/board";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
@@ -19,6 +19,13 @@ export default function LeaderBoard({
   user,
 }: ComponentProps<typeof Board>) {
   const router = useRouter();
+  const replayButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (replayButtonRef.current) {
+      replayButtonRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,6 +40,7 @@ export default function LeaderBoard({
     <Stack alignItems="center" gap={8}>
       <Board rows={rows} user={user} game="Flap Bird" />
       <Button
+        ref={replayButtonRef}
         w="100%"
         maxW="md"
         onClick={() => {
@@ -41,6 +49,9 @@ export default function LeaderBoard({
       >
         Play Again
       </Button>
+      <Link href="https://twitter.com/curd_inc" isExternal>
+        Follow us on twitter
+      </Link>
     </Stack>
   );
 }
