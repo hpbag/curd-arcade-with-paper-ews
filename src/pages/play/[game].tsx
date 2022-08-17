@@ -1,7 +1,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 import { getAssetUrl, getNftHoldings } from "lib/utils/getNftHoldings";
-import { getWalletFromReq } from "lib/utils/getWalletFromReq";
+import { getAddressFromReq } from "lib/utils/getWalletFromReq";
 
 const FlapSpacePage = ({
   imageLink,
@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   try {
-    const address = await getWalletFromReq(context.req.cookies);
+    const address = await getAddressFromReq(context.req.cookies);
     const nfts = await getNftHoldings(address);
     const assetUrl = getAssetUrl(nfts);
     return { props: { imageLink: assetUrl } };

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { getWalletFromReq } from "lib/utils/getWalletFromReq";
+import { getAddressFromReq } from "lib/utils/getWalletFromReq";
 
 const authenticate = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -10,7 +10,7 @@ const authenticate = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const address = await getWalletFromReq(req.cookies);
+    const address = await getAddressFromReq(req.cookies);
     return res.status(200).json(address);
   } catch (e) {
     return res.status(400).json({});

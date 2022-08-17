@@ -1,7 +1,7 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import type { NextApiRequest } from "next";
 
-export async function getWalletFromReq(cookies: NextApiRequest["cookies"]) {
+export async function getAddressFromReq(cookies: NextApiRequest["cookies"]) {
   const PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY;
   if (!PRIVATE_KEY) {
     throw new Error("Admin private key not set");
