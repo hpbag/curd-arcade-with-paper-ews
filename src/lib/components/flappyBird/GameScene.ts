@@ -110,7 +110,7 @@ export default class GameScene extends Phaser.Scene {
       this.background.tilePositionX += 4;
       this.player.update();
       this.physics.add.overlap(this.player, this.pipes, () => {
-        this.player.setDead(false);
+        this.player.setDead(true);
       });
     } else {
       // stop the pipes
