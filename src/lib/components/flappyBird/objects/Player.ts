@@ -1,6 +1,4 @@
 export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
-  private jumpKeyPhone: Phaser.Input.Pointer;
-
   private jumpKeyLaptop: Phaser.Input.Keyboard.Key;
 
   private isDead: boolean;
@@ -9,13 +7,10 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
 
   private textureName: string;
 
-  private isClicking: boolean;
-
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture);
 
     // TODO: ADD PHONE TOUCH
-    this.jumpKeyPhone = this.scene.input.activePointer;
     this.jumpKeyLaptop = this.scene.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
@@ -32,7 +27,6 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
     // variables
     this.isDead = false;
     this.isFlapping = false;
-    this.isClicking = false;
 
     // texture
     this.textureName = texture;
@@ -71,33 +65,23 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
       this.angle += 2;
     }
 
-    if (this.jumpKeyPhone.isDown && !this.isClicking) {
-      this.isFlapping = false;
-      this.isClicking = true;
-    }
-
-    // handle input
-    if (!this.jumpKeyPhone.isDown && this.isClicking) {
-      this.isFlapping = true;
-      this.setVelocityY(-500);
-      this.flap();
-      this.isClicking = false;
-    }
-
-    if (this.jumpKeyLaptop.isDown && !this.isFlapping) {
+    if (
+      (this.jumpKeyLaptop.isDown && !this.isFlapping) ||
+      (this.scene.input.activePointer.isDown && !this.isFlapping)
+    ) {
       // flap
+      if (this.scene.input.activePointer.isDown) {
+        this.setVelocityY(-500);
+      } else {
+        this.setVelocityY(-300);
+      }
       this.isFlapping = true;
-      this.setVelocityY(-300);
       this.flap();
-    }
-
-    if (this.jumpKeyLaptop.isDown && this.isFlapping) {
+    } else if (
+      (this.jumpKeyLaptop.isDown && this.isFlapping) ||
+      (this.scene.input.activePointer.isDown && this.isFlapping)
+    ) {
       this.isFlapping = false;
     }
-
-    // check if off the screen: i think technically cant be but whatever
-    // if (this.y + this.height > this.scene.sys.canvas.height) {
-    //   this.isDead = true;
-    // }
   }
 }

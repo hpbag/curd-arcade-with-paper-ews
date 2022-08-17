@@ -118,7 +118,6 @@ export default class GameScene extends Phaser.Scene {
         (pipe: Phaser.GameObjects.GameObject) => {
           if ((pipe as Phaser.Physics.Arcade.Image).x < 0) {
             this.pipes.remove(pipe);
-            console.log("pipeRemoved");
           }
         },
         this
