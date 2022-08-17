@@ -71,21 +71,27 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
       this.angle += 2;
     }
 
+    if (this.jumpKeyPhone.isDown && !this.isClicking) {
+      this.isFlapping = false;
+      this.isClicking = true;
+    }
+
     // handle input
     if (!this.jumpKeyPhone.isDown && this.isClicking) {
       this.isFlapping = true;
       this.setVelocityY(-500);
       this.flap();
       this.isClicking = false;
-    } else if (this.jumpKeyPhone.isDown && !this.isClicking) {
-      this.isFlapping = false;
-      this.isClicking = true;
-    } else if (this.jumpKeyLaptop.isDown && !this.isFlapping) {
+    }
+
+    if (this.jumpKeyLaptop.isDown && !this.isFlapping) {
       // flap
       this.isFlapping = true;
       this.setVelocityY(-300);
       this.flap();
-    } else if (this.jumpKeyLaptop.isDown && this.isFlapping) {
+    }
+
+    if (this.jumpKeyLaptop.isDown && this.isFlapping) {
       this.isFlapping = false;
     }
 
