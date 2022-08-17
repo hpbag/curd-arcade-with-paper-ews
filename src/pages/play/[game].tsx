@@ -1,7 +1,10 @@
 import { Box } from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
 
+import { useGame } from "lib/components/flappyBird/useGame";
+
 const FlapSpacePage = () => {
+  useGame();
   return <Box id="game-container" />;
 };
 
