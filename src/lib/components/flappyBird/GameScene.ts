@@ -55,7 +55,7 @@ export default class GameScene extends Phaser.Scene {
     this.addNewRowOfPipes();
 
     this.time.addEvent({
-      delay: 1000,
+      delay: 1500,
       callback: this.addNewRowOfPipes,
       callbackScope: this,
       loop: true,
