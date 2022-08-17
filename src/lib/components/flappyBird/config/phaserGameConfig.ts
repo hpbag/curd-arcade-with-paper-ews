@@ -23,7 +23,7 @@ export const config: Types.Core.GameConfig = {
 
     arcade: {
       // remove this on prod
-      // debug: true,
+      debug: true,
       gravity: { y: 300 },
     },
   },

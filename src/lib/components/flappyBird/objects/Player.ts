@@ -1,5 +1,5 @@
 export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
-  private jumpKeyPhone: Phaser.Input.Keyboard.Key;
+  private jumpKeyPhone: Phaser.Input.Pointer;
 
   private jumpKeyLaptop: Phaser.Input.Keyboard.Key;
 
@@ -9,13 +9,13 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
 
   private textureName: string;
 
+  private isClicking: boolean;
+
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture);
 
     // TODO: ADD PHONE TOUCH
-    this.jumpKeyPhone = this.scene.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
-    );
+    this.jumpKeyPhone = this.scene.input.activePointer;
     this.jumpKeyLaptop = this.scene.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
@@ -23,8 +23,7 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
     // Phaser env
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.setSize(10, 15); // .setScale(3); //.setOffset(0, 18)
-
+    this.setSize(25, 50).setScale(1.5); // .setScale(3); //.setOffset(0, 18)
     // create gravity
     this.setGravityY(1000);
     // for scene
@@ -33,6 +32,7 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
     // variables
     this.isDead = false;
     this.isFlapping = false;
+    this.isClicking = false;
 
     // texture
     this.textureName = texture;
@@ -53,6 +53,15 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
     this.isDead = dead;
   }
 
+  public flap() {
+    this.scene.tweens.add({
+      targets: this,
+      props: { angle: -20 },
+      duration: 150,
+      ease: "Power0",
+    });
+  }
+
   override update(): void {
     if (this.isDead) {
       return;
@@ -63,16 +72,19 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
     }
 
     // handle input
-    if (this.jumpKeyLaptop.isDown && !this.isFlapping) {
+    if (!this.jumpKeyPhone.isDown && this.isClicking) {
+      this.isFlapping = true;
+      this.setVelocityY(-500);
+      this.flap();
+      this.isClicking = false;
+    } else if (this.jumpKeyPhone.isDown && !this.isClicking) {
+      this.isFlapping = false;
+      this.isClicking = true;
+    } else if (this.jumpKeyLaptop.isDown && !this.isFlapping) {
       // flap
       this.isFlapping = true;
-      this.setVelocityY(-350);
-      this.scene.tweens.add({
-        targets: this,
-        props: { angle: -20 },
-        duration: 150,
-        ease: "Power0",
-      });
+      this.setVelocityY(-300);
+      this.flap();
     } else if (this.jumpKeyLaptop.isDown && this.isFlapping) {
       this.isFlapping = false;
     }
