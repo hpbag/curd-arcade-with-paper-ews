@@ -14,6 +14,7 @@ export async function getRedisClient() {
       },
     });
     await client.connect();
+    console.log("connected to redis");
   }
   return client;
 }

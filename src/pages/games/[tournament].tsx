@@ -170,12 +170,14 @@ const Tournament = ({
 export default Tournament;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log("context.params?.tournament", context.params?.tournament);
   if (context.params?.tournament !== TOURNAMENT) {
     return { notFound: true };
   }
   try {
     const address = await getAddressFromCookies(context.req.cookies);
     const handle = await getUserTwitterHandle(address || "");
+    console.log("handle", handle);
     if (!handle) {
       throw new Error("Missing handle");
     }
@@ -185,8 +187,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       TOURNAMENT,
       parseInt(process.env.LEADER_BOARD_PLAYERS as string, 10)
     );
+    console.log("result", result);
     return { props: { user: { value: handle, rank, score }, rows: result } };
   } catch (e) {
+    console.log("e in tournament page", e);
     const result = await getTopXScores(
       GAME,
       TOURNAMENT,
