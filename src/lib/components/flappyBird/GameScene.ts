@@ -112,6 +112,16 @@ export default class GameScene extends Phaser.Scene {
       this.physics.add.overlap(this.player, this.pipes, () => {
         this.player.setDead(true);
       });
+      Phaser.Actions.Call(
+        this.pipes.getChildren(),
+        (pipe: Phaser.GameObjects.GameObject) => {
+          if ((pipe as Phaser.Physics.Arcade.Image).x < 0) {
+            this.pipes.remove(pipe);
+            console.log("pipeRemoved");
+          }
+        },
+        this
+      );
     } else {
       // stop the pipes
       this.time.paused = true;
@@ -123,7 +133,7 @@ export default class GameScene extends Phaser.Scene {
         this
       );
 
-      window.location.assign("http://localhost:3000/end/flap-space");
+      window.location.assign("http://localhost:3000/leader-board/flap-space");
       this.scene.stop();
     }
     this.player.update();
