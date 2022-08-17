@@ -5,7 +5,6 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -67,13 +66,13 @@ export const Board = ({
               </>
             )}
           </Tbody>
-          <Tfoot>
+          {/* <Tfoot>
             <Tr>
               <Th isNumeric>Rank</Th>
               <Th>User</Th>
               <Th isNumeric>Score</Th>
             </Tr>
-          </Tfoot>
+          </Tfoot> */}
         </Table>
       </TableContainer>
     </>

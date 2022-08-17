@@ -1,3 +1,4 @@
+import { Kbd, Stack, Text } from "@chakra-ui/react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 import { useGame } from "lib/components/flappyBird/useGame";
@@ -9,7 +10,14 @@ const FlapSpacePage = ({
   imageLink,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   useGame(imageLink);
-  return <div id="game-container" />;
+  return (
+    <Stack gap={5} alignItems="center">
+      <Text>
+        <Kbd>Space</Kbd> to jump a little or <Kbd>tap</Kbd> to jump a lot
+      </Text>
+      <div id="game-container" />
+    </Stack>
+  );
 };
 
 export default FlapSpacePage;
