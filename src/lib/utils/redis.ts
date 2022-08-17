@@ -12,6 +12,7 @@ export async function getRedisClient() {
             ? "localhost"
             : "srv-captain--curd-casino-redis ",
       },
+      password: process.env.REDIS_PASSWORD,
     });
     await client.connect();
     console.log("connected to redis");
