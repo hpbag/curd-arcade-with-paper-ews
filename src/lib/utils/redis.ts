@@ -1,5 +1,7 @@
 import { createClient } from "redis";
 
+import { REDIS_HOST } from "lib/constants/routes";
+
 let client: ReturnType<typeof createClient>;
 
 export async function getRedisClient() {
@@ -7,10 +9,7 @@ export async function getRedisClient() {
     client = createClient({
       socket: {
         port: 6379,
-        host:
-          process.env.NEXT_PUBLIC_NODE_ENV === "development"
-            ? "localhost"
-            : "srv-captain--curd-casino-redis ",
+        host: REDIS_HOST,
       },
       password: process.env.REDIS_PASSWORD,
     });
