@@ -56,7 +56,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       throw new Error("Missing handle");
     }
     const { rank, score } = await getUserScoreAndRank(GAME, TOURNAMENT, handle);
-    console.log("rank,score", rank, score);
     const result = await getTopXScores(
       GAME,
       TOURNAMENT,
