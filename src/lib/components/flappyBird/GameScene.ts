@@ -1,4 +1,5 @@
 import { GAME_HEIGHT, GAME_WIDTH } from "lib/constants/phaserConsts";
+import { BASE_URL } from "lib/constants/routes";
 
 import { Pipe } from "./objects/Pipe";
 import { PlayerSprite } from "./objects/Player";
@@ -12,16 +13,16 @@ export default class GameScene extends Phaser.Scene {
 
   private player!: PlayerSprite;
 
-  private skin: string;
+  private skin = "";
 
   constructor() {
     super("GAME_SCENE");
-    // SET SKIN HERE // "buildspace" | "farza" | "hans" | "winston"
-    this.skin = "buildspace";
   }
 
-  init() {
+  init({ skin }: { skin: string }) {
     this.registry.set("score", -1);
+    // SET SKIN HERE // "buildspace" | "farza" | "hans" | "winston"
+    this.skin = skin;
   }
 
   create() {
@@ -101,7 +102,7 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
-  override update() {
+  override async update() {
     if (!this.player) {
       // todo: Show some loading screen
       return;
@@ -110,7 +111,7 @@ export default class GameScene extends Phaser.Scene {
       this.background.tilePositionX += 4;
       this.player.update();
       this.physics.add.overlap(this.player, this.pipes, () => {
-        this.player.setDead(false); // must be true
+        this.player.setDead(true); // must be true
       });
       Phaser.Actions.Call(
         this.pipes.getChildren(),
@@ -133,7 +134,7 @@ export default class GameScene extends Phaser.Scene {
         this
       );
 
-      window.location.assign("http://localhost:3000/leader-board/flap-space");
+      window.location.assign(`${BASE_URL}/leader-board/flap-space`);
       this.scene.stop();
     }
     this.player.update();

@@ -8,6 +8,6 @@ export async function getNftHoldings(walletAddress: string) {
   return edition.getOwned(walletAddress);
 }
 
-export function getAssetUrl(nfts: { [key: string]: any }[]) {
-  return `${nfts[0].metadata.attributes[0].value}.png`;
+export function getAssetName(nfts: { [key: string]: any }[]) {
+  return `${nfts[0].metadata.attributes[0].value}`;
 }

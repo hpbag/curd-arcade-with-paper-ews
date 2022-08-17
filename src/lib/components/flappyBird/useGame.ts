@@ -13,7 +13,7 @@ async function getPhaserGameImports() {
   return { Phaser: phaser2, gameConfig: config2 };
 }
 
-export function useGame() {
+export function useGame(skin?: string) {
   const isInit = useRef(true);
   const [game, setGame] = React.useState<Game | undefined>(undefined);
   useEffect(() => {
@@ -22,6 +22,7 @@ export function useGame() {
         isInit.current = false;
         const { Phaser, gameConfig } = await getPhaserGameImports();
         const newGame = new Phaser.Game(gameConfig);
+        newGame.scene.start("LOADING_SCENE", { skin: skin || "buildspace" });
         setGame(newGame);
       }
     }
@@ -30,7 +31,7 @@ export function useGame() {
     return () => {
       game?.destroy(true);
     };
-  }, [game]);
+  }, [game, skin]);
 
   return { game };
 }

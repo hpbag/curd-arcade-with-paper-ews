@@ -1,34 +1,29 @@
 export default class LoadingScene extends Phaser.Scene {
+  private skin = "";
+
   constructor() {
     super("LOADING_SCENE");
   }
 
+  init({ skin }: { skin: string }) {
+    this.skin = skin;
+  }
+
   preload(): void {
+    if (!this.skin) {
+      throw new Error("Missing skin");
+    }
+
     // load map
     this.load.pack("flappyBirdPack", "/assets/pack.json", "flappyBirdPack");
 
     this.load.image({
-      key: "farza",
-      url: "/character_images/farza.png",
-    });
-
-    this.load.image({
-      key: "buildspace",
-      url: "/character_images/buildspace.png",
-    });
-
-    this.load.image({
-      key: "hans",
-      url: "/character_images/hans.png",
-    });
-
-    this.load.image({
-      key: "winston",
-      url: "/character_images/winston.png",
+      key: this.skin,
+      url: `/character_images/${this.skin}.png`,
     });
   }
 
   create(): void {
-    this.scene.start("GAME_SCENE");
+    this.scene.start("GAME_SCENE", { skin: this.skin });
   }
 }
