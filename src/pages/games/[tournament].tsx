@@ -6,17 +6,41 @@ import {
   Image,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
-import type { GetServerSideProps } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect } from "react";
 
 import { GameStats } from "lib/components/gameStats/gameStats";
 import { Board } from "lib/pages/leader-board/board";
+import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
+import {
+  GAME,
+  getTopXScores,
+  getUserScoreAndRank,
+  getUserTwitterHandle,
+  TOURNAMENT,
+} from "lib/utils/redis";
 
-const Tournament = () => {
-  const [isLive] = useState(true);
+const Tournament = ({
+  rows,
+  user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+  const toast = useToast();
+  useEffect(() => {
+    if (router.query.message) {
+      toast({
+        description: router.query.message,
+        status: "info",
+        isClosable: true,
+        duration: 6000,
+        id: "message",
+      });
+      router.push(router.asPath.split("?")[0], undefined, { shallow: true });
+    }
+  }, [router, router.query.message, toast]);
 
   return (
     <Flex flexDirection="column" gap={10}>
@@ -120,20 +144,20 @@ const Tournament = () => {
         </Flex>
       </Stack>
 
-      <Board />
+      <Board rows={rows} user={user} game="Flap Bird" />
 
       <Stack alignItems="center">
         <Heading fontSize="2xl" pb={3}>
-          Game Goes Live Time
+          Game Goes Live
         </Heading>
-        {isLive ? (
+        {process.env.NEXT_PUBLIC_IS_LIVE ? (
           <Button
             colorScheme="orange"
             onClick={() => {
-              router.push("/play/flap-space");
+              router.push(`/play/flap-space`);
             }}
           >
-            Play Now
+            Right Now
           </Button>
         ) : (
           <Text>Sometime Tomorrow, look out for the message on Whatsapp!</Text>
@@ -146,8 +170,28 @@ const Tournament = () => {
 export default Tournament;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (context.params?.tournament !== "n&w-buildspace") {
+  if (context.params?.tournament !== TOURNAMENT) {
     return { notFound: true };
   }
-  return { props: {} };
+  try {
+    const address = await getAddressFromCookies(context.req.cookies);
+    const handle = await getUserTwitterHandle(address || "");
+    if (!handle) {
+      throw new Error("Missing handle");
+    }
+    const { rank, score } = await getUserScoreAndRank(GAME, TOURNAMENT, handle);
+    const result = await getTopXScores(
+      GAME,
+      TOURNAMENT,
+      parseInt(process.env.LEADER_BOARD_PLAYERS as string, 10)
+    );
+    return { props: { user: { value: handle, rank, score }, rows: result } };
+  } catch (e) {
+    const result = await getTopXScores(
+      GAME,
+      TOURNAMENT,
+      parseInt(process.env.LEADER_BOARD_PLAYERS as string, 10)
+    );
+    return { props: { rows: result } };
+  }
 };

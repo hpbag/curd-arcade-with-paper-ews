@@ -2,7 +2,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 import { getAssetUrl, getNftHoldings } from "lib/utils/getNftHoldings";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
-import { isNewUser } from "lib/utils/redis";
+import { GAME, isNewUser } from "lib/utils/redis";
 
 const FlapSpacePage = ({
   imageLink,
@@ -13,10 +13,10 @@ const FlapSpacePage = ({
 export default FlapSpacePage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (context.params?.game !== "flap-space") {
+  if (context.params?.game !== GAME) {
     return { notFound: true };
   }
-  const pathToComeBackTo = encodeURIComponent(context.req.url || "");
+  const pathToComeBackTo = encodeURIComponent(`/play/${context.params?.game}`);
 
   try {
     const address = await getAddressFromCookies(context.req.cookies);
@@ -29,6 +29,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     }
     const nfts = await getNftHoldings(address);
+    if (nfts.length === 0) {
+      return {
+        redirect: {
+          destination: `/games/n%26w-buildspace?message=${encodeURIComponent(
+            "Purchase a character first!"
+          )}`,
+          permanent: false,
+        },
+      };
+    }
     const assetUrl = getAssetUrl(nfts);
     return { props: { imageLink: assetUrl } };
   } catch (e) {

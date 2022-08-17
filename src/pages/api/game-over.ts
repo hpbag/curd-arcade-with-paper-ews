@@ -2,6 +2,12 @@ import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
+import {
+  GAME,
+  getUserTwitterHandle,
+  setLeaderScore,
+  TOURNAMENT,
+} from "lib/utils/redis";
 
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -21,13 +27,22 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const signedAddress = ethers.utils.verifyMessage(``, payload.signature);
+    const signedAddress = ethers.utils.verifyMessage(
+      `score: ${payload.score}`,
+      payload.signature
+    );
     if (signedAddress !== address) {
       return res.status(400).json("Invalid Authorization");
     }
-    return res.status(200).json({ message: "OKp" });
+    const handle = await getUserTwitterHandle(address);
+    if (!handle) {
+      throw new Error("Missing handle");
+    }
+    const resp = await setLeaderScore(GAME, TOURNAMENT, handle, payload.score);
+
+    return res.status(200).json({ resp });
   } catch (e) {
-    return res.status(400).json({ error: "Invalid Signature" });
+    return res.status(400).json({ error: (e as Error).message });
   }
 };
 

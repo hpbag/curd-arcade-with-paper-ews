@@ -18,15 +18,19 @@ export async function getRedisClient() {
   return client;
 }
 
+export const GAME = "flap-space";
+export const TOURNAMENT = "n&w-buildspace";
 export function getLeaderBoardKey(game: string, tournament: string) {
   return `leaderBoard:${game}:${tournament}`;
 }
 
 export async function setLeaderScore(
-  leaderBoardKey: string,
+  game: string,
+  tournament: string,
   userId: string,
   score: number
 ) {
+  const leaderBoardKey = getLeaderBoardKey(game, tournament);
   return (await getRedisClient()).zAdd(
     leaderBoardKey,
     [{ score, value: userId }],
@@ -36,8 +40,26 @@ export async function setLeaderScore(
   );
 }
 
-export async function getTopXScores(leaderBoardKey: string, topX: number) {
-  return (await getRedisClient()).zRange(leaderBoardKey, 0, topX, {
+export async function getUserScoreAndRank(
+  game: string,
+  tournament: string,
+  userId: string
+) {
+  const leaderBoardKey = getLeaderBoardKey(game, tournament);
+  const redisClient = await getRedisClient();
+  const rankResp = redisClient.zRevRank(leaderBoardKey, userId);
+  const scoreResp = redisClient.zmScore(leaderBoardKey, userId);
+  const [rank, score] = await Promise.all([rankResp, scoreResp]);
+  return { rank, score: score[0] };
+}
+
+export async function getTopXScores(
+  game: string,
+  tournament: string,
+  topX: number
+) {
+  const leaderBoardKey = getLeaderBoardKey(game, tournament);
+  return (await getRedisClient()).zRangeWithScores(leaderBoardKey, 0, topX, {
     REV: true,
   });
 }

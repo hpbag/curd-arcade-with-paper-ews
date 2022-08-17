@@ -25,24 +25,28 @@ export default function Login() {
 
   const signInWithEthereum = async () => {
     setIsLoading(true);
-    await connectWithMetamask();
-    const result = await login();
-    if (result.newUser) {
-      router.push(`/onboard?redirect=${router.query.redirect}`);
-    } else if (router.query.redirect) {
-      router.push(new URL(router.query.redirect as string, BASE_URL));
-    } else {
-      toast({
-        title: "Logged In.",
-        description: "Successfully logged in!",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "bottom",
-      });
+    try {
+      await connectWithMetamask();
+      const result = await login();
+      if (result.newUser) {
+        router.push(`/onboard?redirect=${router.query.redirect}`);
+      } else if (router.query.redirect) {
+        router.push(new URL(router.query.redirect as string, BASE_URL));
+      } else {
+        toast({
+          title: "Logged In.",
+          description: "Successfully logged in!",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+      setIsLoggedIn(true);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
     }
-    setIsLoggedIn(true);
-    setIsLoading(false);
   };
 
   return (
