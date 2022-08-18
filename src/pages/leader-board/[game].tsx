@@ -3,7 +3,6 @@ import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import type { ComponentProps } from "react";
 import { useEffect, useRef } from "react";
-import { setInterval } from "timers";
 
 import { Board } from "lib/pages/leader-board/board";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
@@ -27,15 +26,6 @@ export default function LeaderBoard({
       replayButtonRef.current.focus();
     }
   }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      router.replace(router.asPath, undefined, { scroll: false });
-    }, 10000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [router]);
 
   return (
     <Stack alignItems="center" gap={8}>

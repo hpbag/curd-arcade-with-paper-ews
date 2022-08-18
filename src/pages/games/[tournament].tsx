@@ -32,15 +32,6 @@ const Tournament = ({
   const toast = useToast();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      router.replace(router.asPath);
-    }, 10000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [router]);
-
-  useEffect(() => {
     if (router.query.message) {
       toast({
         description: router.query.message,
