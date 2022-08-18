@@ -12,6 +12,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import { CountDownTimer } from "lib/components/CountDownTimer/CountdownTimer";
 import { GameStats } from "lib/components/gameStats/gameStats";
 import { Board } from "lib/pages/leader-board/board";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
@@ -70,6 +71,24 @@ const Tournament = ({
           <Text mb={2}>42% of players make more than they paid 👀</Text>
         </Box>
       </Flex>
+
+      <Stack alignItems="center" gap={4}>
+        <Heading fontSize="xl">Ending In</Heading>
+        {/* Aug 19th midnight */}
+        <CountDownTimer targetDate={1660892400000} />
+        {new Date().getTime() > 1660892400000 ? null : (
+          <Button
+            px={10}
+            colorScheme="orange"
+            onClick={() => {
+              router.push(`/play/flap-space`);
+            }}
+          >
+            Play Now
+          </Button>
+        )}
+      </Stack>
+
       <Stack>
         <Heading fontSize="2xl" textAlign="center" py={4}>
           Choose Your characters
@@ -84,7 +103,7 @@ const Tournament = ({
           pb={5}
         >
           <Stack alignItems="center">
-            <Image src="/buildspace.png" w={52} />
+            <Image rounded="lg" src="/buildspace.png" w={52} />
             <Heading fontSize="xl">Buildspace</Heading>
 
             <Button
@@ -101,7 +120,7 @@ const Tournament = ({
             </Button>
           </Stack>
           <Stack alignItems="center">
-            <Image src="/farza.png" w={52} />
+            <Image rounded="lg" src="/farza.png" w={52} />
             <Heading fontSize="xl">Farza</Heading>
 
             <Button
@@ -118,7 +137,7 @@ const Tournament = ({
             </Button>
           </Stack>
           <Stack alignItems="center">
-            <Image src="/winston.png" w={52} />
+            <Image rounded="lg" src="/winston.png" w={52} />
             <Heading fontSize="xl">Winston@Curd</Heading>
 
             <Button
@@ -135,7 +154,7 @@ const Tournament = ({
             </Button>
           </Stack>
           <Stack alignItems="center">
-            <Image src="/hans.png" w={52} />
+            <Image rounded="lg" src="/hans.png" w={52} />
             <Heading fontSize="xl">Hans@Curd</Heading>
 
             <Button
@@ -155,24 +174,6 @@ const Tournament = ({
       </Stack>
 
       <Board rows={rows} user={user} game="Flap Bird" />
-
-      <Stack alignItems="center">
-        <Heading fontSize="2xl" pb={3}>
-          Game Goes Live
-        </Heading>
-        {process.env.NEXT_PUBLIC_IS_LIVE ? (
-          <Button
-            colorScheme="orange"
-            onClick={() => {
-              router.push(`/play/flap-space`);
-            }}
-          >
-            Right Now
-          </Button>
-        ) : (
-          <Text>Sometime Tomorrow, look out for the message on Whatsapp!</Text>
-        )}
-      </Stack>
     </Flex>
   );
 };

@@ -3,6 +3,7 @@ import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import type { ComponentProps } from "react";
 import { useEffect, useRef } from "react";
+import { setInterval } from "timers";
 
 import { Board } from "lib/pages/leader-board/board";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
@@ -29,7 +30,7 @@ export default function LeaderBoard({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      router.replace(router.asPath);
+      router.replace(router.asPath, undefined, { scroll: false });
     }, 10000);
     return () => {
       clearInterval(interval);
@@ -38,17 +39,18 @@ export default function LeaderBoard({
 
   return (
     <Stack alignItems="center" gap={8}>
-      <Board rows={rows} user={user} game="Flap Bird" />
       <Button
         ref={replayButtonRef}
         w="100%"
         maxW="md"
+        mt={20}
         onClick={() => {
           router.push("/play/flap-space");
         }}
       >
         Play Again
       </Button>
+      <Board rows={rows} user={user} game="Flap Bird" />
       <Link href="https://twitter.com/curd_inc" isExternal>
         Follow us on twitter
       </Link>

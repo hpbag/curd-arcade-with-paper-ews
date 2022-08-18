@@ -1,10 +1,10 @@
 import {
   Heading,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -23,14 +23,12 @@ export const Board = ({
   const [isUserInList, setIsUserInList] = useState(false);
   return (
     <>
-      <Heading textAlign="center" py={5} fontSize={{ base: "2xl", md: "3xl" }}>
+      <Heading textAlign="center" fontSize={{ base: "2xl", md: "3xl" }}>
         {game} Leader Board
       </Heading>
-      <TableContainer maxW="md" mx="auto">
+
+      <TableContainer maxW={{ base: "sm", md: "md" }} mx="auto">
         <Table variant="simple">
-          <TableCaption>
-            Rank for same scoring users is not reflective of actual position
-          </TableCaption>
           <Thead>
             <Tr>
               <Th isNumeric>Rank</Th>
@@ -45,7 +43,7 @@ export const Board = ({
               }
               return (
                 <Tr key={row.value}>
-                  <Td isNumeric>{index}</Td>
+                  <Td isNumeric>{index + 1}</Td>
                   <Td>{row.value}</Td>
                   <Td isNumeric>{row.score}</Td>
                 </Tr>
@@ -66,15 +64,11 @@ export const Board = ({
               </>
             )}
           </Tbody>
-          {/* <Tfoot>
-            <Tr>
-              <Th isNumeric>Rank</Th>
-              <Th>User</Th>
-              <Th isNumeric>Score</Th>
-            </Tr>
-          </Tfoot> */}
         </Table>
       </TableContainer>
+      <Text fontSize="xs" opacity={0.6}>
+        Rank for same scoring users is not reflective of actual position
+      </Text>
     </>
   );
 };

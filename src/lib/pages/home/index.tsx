@@ -4,7 +4,6 @@ import {
   Heading,
   Image,
   Stack,
-  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
@@ -38,7 +37,7 @@ const Home = () => {
         mb={8}
         w="full"
       >
-        <Stack
+        {/* <Stack
           justifyContent="center"
           h="60vh"
           w="100%"
@@ -49,8 +48,8 @@ const Home = () => {
             <Heading>Pay To Play</Heading>
             <Text opacity={0.5}>Get rewarded for your skills</Text>
           </Box>
-        </Stack>
-        <Heading>Upcoming Games</Heading>
+        </Stack> */}
+        <Heading>Ongoing Games</Heading>
         <Stack textAlign="center">
           <Flex
             flexDirection={{ base: "column", md: "row" }}
