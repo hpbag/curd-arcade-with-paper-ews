@@ -65,13 +65,13 @@ export async function getTopXScores(
   });
 }
 
-const UserKeyParams = {
-  twitterHandle: "twitterHandle",
-};
-
 export function getUserKey(walletAddress: string) {
   return `user:${walletAddress}`;
 }
+const UserKeyParams = {
+  twitterHandle: "twitterHandle",
+  notifyMe: "notifyMe",
+};
 
 export async function getUserTwitterHandle(walletAddress: string) {
   const userKey = getUserKey(walletAddress);
@@ -83,14 +83,18 @@ export async function setUserTwitterHandle(
   handle: string
 ) {
   const userKey = getUserKey(walletAddress);
-  return (await getRedisClient()).hSet(userKey, "twitterHandle", handle);
+  return (await getRedisClient()).hSet(
+    userKey,
+    UserKeyParams.twitterHandle,
+    handle
+  );
 }
 
 export async function setNotifyMe(walletAddress: string, notifyMe: boolean) {
   const userKey = getUserKey(walletAddress);
   return (await getRedisClient()).hSet(
     userKey,
-    "notifyMe",
+    UserKeyParams.notifyMe,
     notifyMe ? "true" : ""
   );
 }
