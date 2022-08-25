@@ -1,11 +1,9 @@
 import {
-  Box,
   Button,
   Flex,
   Heading,
   Image,
   Stack,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -13,7 +11,6 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import { CountDownTimer } from "lib/components/CountDownTimer/CountdownTimer";
-import { GameStats } from "lib/components/gameStats/gameStats";
 import { Board } from "lib/pages/leader-board/board";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 import {
@@ -56,11 +53,6 @@ const Tournament = ({
         <Heading pb={2} fontSize={{ base: "2xl", md: "4xl" }}>
           BuildSpace Flap Off
         </Heading>
-        <GameStats />
-        <Box mt={6} textAlign="center">
-          <Text fontWeight="bold">Stand to win up to 3x!</Text>
-          <Text mb={2}>42% of players make more than they paid 👀</Text>
-        </Box>
       </Flex>
 
       <Stack alignItems="center" gap={4}>
@@ -172,7 +164,6 @@ const Tournament = ({
 export default Tournament;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log("context.params?.tournament", context.params?.tournament);
   if (context.params?.tournament !== TOURNAMENT) {
     return { notFound: true };
   }

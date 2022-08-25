@@ -1,21 +1,40 @@
 import { Box, Spinner, Text } from "@chakra-ui/react";
 import { useEditionDrop, useToken } from "@thirdweb-dev/react";
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-export const GameStats = () => {
-  const editionDrop = useEditionDrop(
-    "0xC50Ee7a95AEcEb509f305AAff326481001A5D5b6"
+export interface IGameStatsProps {
+  nftContractAddress: string;
+  treasuryAddress: string;
+  tokenContractAddress: string;
+  participantsOverride?: number;
+  prizePoolOverride?: number;
+}
+export const GameStats = ({
+  nftContractAddress,
+  participantsOverride,
+  prizePoolOverride,
+  tokenContractAddress,
+  treasuryAddress,
+}: IGameStatsProps) => {
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat("us-en", {
+        style: "currency",
+        currency: "USD",
+      }),
+    []
   );
-  const token = useToken("0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174");
+
+  const editionDrop = useEditionDrop(nftContractAddress);
+  const token = useToken(tokenContractAddress);
+
   const [prizePool, setPrizePool] = useState<string>("");
   const [participants, setParticipants] = useState<number | undefined>();
 
   useEffect(() => {
     const getData = async () => {
-      const fetchBalance = await token?.balanceOf(
-        "0x61c66721D9094DA3ceCED0F2C52c36c3AE94A319"
-      );
+      const fetchBalance = await token?.balanceOf(treasuryAddress);
       const tokenOneSupply =
         (await editionDrop?.totalSupply(0)) || ethers.BigNumber.from(0);
       const tokenTwoSupply =
@@ -33,10 +52,6 @@ export const GameStats = () => {
       };
     };
     getData().then((result) => {
-      const currencyFormatter = new Intl.NumberFormat("us-en", {
-        style: "currency",
-        currency: "USD",
-      });
       setParticipants(parseInt(result.participants?.toString() || "0", 10));
       setPrizePool(
         currencyFormatter.format(
@@ -44,20 +59,28 @@ export const GameStats = () => {
         )
       );
     });
-  }, [editionDrop, token]);
+  }, [currencyFormatter, editionDrop, token, treasuryAddress]);
 
-  if (!editionDrop) {
-    return null;
-  }
+  const finalParticipants =
+    typeof participantsOverride === "number"
+      ? participantsOverride
+      : participants;
 
   return (
     <Box>
       <Text fontWeight="bold" fontSize="md">
-        Prize Pool : {!prizePool ? <Spinner /> : prizePool}
+        Prize Pool :{" "}
+        {typeof prizePoolOverride === "number"
+          ? currencyFormatter.format(prizePoolOverride)
+          : prizePool || <Spinner />}
       </Text>
       <Text fontWeight="bold" fontSize="md">
         Total Participants:{" "}
-        {typeof participants === "number" ? participants : <Spinner />}
+        {typeof finalParticipants === "number" ? (
+          finalParticipants
+        ) : (
+          <Spinner />
+        )}
       </Text>
     </Box>
   );
