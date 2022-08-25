@@ -27,7 +27,7 @@ const Home = () => {
 
   return (
     <MotionBox initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <NextSeo title="Curd Arcade Home" />
+      <NextSeo title="Home" />
       <Flex
         direction="column"
         alignItems="center"
