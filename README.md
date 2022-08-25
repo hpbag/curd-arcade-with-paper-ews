@@ -1,49 +1,23 @@
-# nextarter-chakra
+<p align="center">
+    <br />
+    <a href="https://curdinc.com"><img src="./public/android-chrome-192x192.png" width="100" alt="curd logo"/></a>
+    <br />
+</p>
+<h1 align="center">Curd Arcade</h1>
+<p align="center">
+    <a href="https://discord.gg/qTP3czz9pE"><img alt="Join our Discord!" src="https://img.shields.io/discord/928878942675423254.svg?color=7289da&label=discord&logo=discord&style=flat"/></a>
+</p>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https://github.com/sozonome/nextarter-chakra) [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sozonome/nextarter-chakra)
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/sozonome/nextarter-chakra)
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app), added with [**Chakra UI**](https://chakra-ui.com) and [**TypeScript**](https://www.typescriptlang.org) setup.
-Start developing right away!
-
-## 🔋 ⚡ Battery Packed template
-
-- ✔️ toolings for linting, formatting, and conventions configured
-
-  `eslint`, `prettier`, `husky`, `lint-staged`, `commitlint`, `commitizen`, and `standard-version`
-
-- 🔎 SEO optimization configured
-
-  with `next-seo` and `next-sitemap`. you'll need to reconfigure or tinker with it to get it right according to your needs, but it's there if you need it.
-
-- 🎨 basic responsive layout configured
-
-  don't need it? just remove it 😃
-
-[![CodeFactor](https://www.codefactor.io/repository/github/sozonome/nextarter-chakra/badge)](https://www.codefactor.io/repository/github/sozonome/nextarter-chakra)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=alert_status)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=bugs)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=code_smells)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra) [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra)
-
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-
-[![Depfu](https://badges.depfu.com/badges/9e426e58f99c3bd470987a3c6b014a96/overview.svg)](https://depfu.com/github/sozonome/nextarter-chakra?project_id=26148) [![Depfu](https://badges.depfu.com/badges/9e426e58f99c3bd470987a3c6b014a96/count.svg)](https://depfu.com/github/sozonome/nextarter-chakra?project_id=26148)
+  <h2 align="center">Built On</h2>
+<p align="center">
+    <a href="https://paper.xyz" style="margin-right: 50px;" ><img src="https://paper.xyz/icons/paper-logo-icon.svg" width="45" alt="curd logo" /></a>
+    <a href="https://thirdweb.com/"><img src="https://thirdweb.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fwhite-logo.52a1f32a.png&w=3840&q=90" width="100" alt="curd logo"/></a>
+</p>
 
 ## Getting Started
 
-You can either click `Use this template` button on this repository and clone the repo or directly from your terminal:
+To start the local server:
 
-```bash
-npx degit sozonome/nextarter-chakra <YOUR_APP_NAME>
-```
-
-Then, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `src/lib/pages/index.tsx`. The page auto-updates as you edit the file.
+1. Install Redis.
+2. Run `yarn` to install the npm packages.
+3. `yarn dev` to start the local server.
