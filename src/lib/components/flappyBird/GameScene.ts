@@ -1,10 +1,14 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "lib/constants/phaserConsts";
+import {
+  FLAPPY_BIRD_GAME_SCENE,
+  GAME_HEIGHT,
+  GAME_WIDTH,
+} from "lib/constants/phaser";
 import { BASE_URL } from "lib/constants/routes";
 
 import { Pipe } from "./objects/Pipe";
 import { PlayerSprite } from "./objects/Player";
 
-export default class GameScene extends Phaser.Scene {
+export default class FlappyBirdGameScene extends Phaser.Scene {
   private background!: Phaser.GameObjects.TileSprite;
 
   private pipes!: Phaser.GameObjects.Group;
@@ -13,15 +17,14 @@ export default class GameScene extends Phaser.Scene {
 
   private player!: PlayerSprite;
 
-  private skin = "";
+  private skin!: string;
 
   constructor() {
-    super("GAME_SCENE");
+    super(FLAPPY_BIRD_GAME_SCENE);
   }
 
   init({ skin }: { skin: string }) {
     this.registry.set("score", -1);
-    // SET SKIN HERE // "buildspace" | "farza" | "hans" | "winston"
     this.skin = skin;
   }
 
@@ -44,7 +47,15 @@ export default class GameScene extends Phaser.Scene {
 
     // pipe infrastructure
     this.pipes = this.add.group({ classType: Pipe });
+    this.addNewPipe();
+    this.time.addEvent({
+      delay: 1500,
+      callback: this.addNewPipe,
+      callbackScope: this,
+      loop: true,
+    });
 
+    // player sprite
     this.player = new PlayerSprite(
       this,
       GAME_WIDTH / 2,
@@ -52,22 +63,46 @@ export default class GameScene extends Phaser.Scene {
       this.skin
     );
 
-    this.addNewRowOfPipes();
-
-    this.time.addEvent({
-      delay: 1500,
-      callback: this.addNewRowOfPipes,
-      callbackScope: this,
-      loop: true,
+    // collision - end game
+    this.physics.add.overlap(this.player, this.pipes, () => {
+      // stopping the game
+      this.scene.pause();
+      fetch("/api/game-over", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          score: Buffer.from(
+            this.registry.values.score.toString(),
+            "utf-8"
+          ).toString("base64"),
+        }),
+        credentials: "include",
+      }).then((resp) => {
+        if (resp.ok) {
+          window.location.assign(`${BASE_URL}/leader-board/flap-space`);
+        } else {
+          resp.json().then((result) => {
+            console.log("Error", result.error);
+          });
+        }
+      });
     });
+
     // set-up camera
     const camera = this.cameras.main;
     camera.startFollow(this.player);
     camera.setZoom(1);
-    camera.setBounds(0, 0, 390, 600);
+    camera.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+    // pause game initially
+    this.scene.pause();
   }
 
-  private addNewRowOfPipes(): void {
+  private addNewPipe(): void {
+    const pipeOffset = 10;
+
     // update the score
     this.registry.values.score += 1;
     this.scoreText.setText(this.registry.values.score);
@@ -79,11 +114,11 @@ export default class GameScene extends Phaser.Scene {
     for (let i = 0; i < 10; i += 1) {
       if (i !== hole && i !== hole + 1 && i !== hole + 2) {
         if (i === hole - 1) {
-          this.addPipe(400, i * 60, 0);
+          this.addPipe(GAME_WIDTH + pipeOffset, i * 60, 0);
         } else if (i === hole + 3) {
-          this.addPipe(400, i * 60, 1);
+          this.addPipe(GAME_WIDTH + pipeOffset, i * 60, 1);
         } else {
-          this.addPipe(400, i * 60, 2);
+          this.addPipe(GAME_WIDTH + pipeOffset, i * 60, 2);
         }
       }
     }
@@ -102,56 +137,21 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
-  override async update() {
-    if (!this.player) {
-      // todo: Show some loading screen
-      return;
-    }
-    if (!this.player.getDead()) {
-      this.background.tilePositionX += 4;
-      this.player.update();
-      this.physics.add.overlap(this.player, this.pipes, () => {
-        this.player.setDead(true); // must be true
-      });
-      Phaser.Actions.Call(
-        this.pipes.getChildren(),
-        (pipe: Phaser.GameObjects.GameObject) => {
-          if ((pipe as Phaser.Physics.Arcade.Image).x < 0) {
-            this.pipes.remove(pipe);
-          }
-        },
-        this
-      );
-    } else {
-      // stop the pipes
-      this.time.paused = true;
-      Phaser.Actions.Call(
-        this.pipes.getChildren(),
-        (pipe: Phaser.GameObjects.GameObject) => {
-          (pipe as Phaser.Physics.Arcade.Image).setVelocityX(0);
-        },
-        this
-      );
-      const resp = await fetch("/api/game-over", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          score: Buffer.from(
-            this.registry.values.score.toString(),
-            "utf-8"
-          ).toString("base64"),
-        }),
-        credentials: "include",
-      });
-      if (resp.ok) {
-        window.location.assign(`${BASE_URL}/leader-board/flap-space`);
-      } else {
-        console.log("Error", (await resp.json()).error);
-      }
-      this.scene.stop();
-    }
+  override update() {
     this.player.update();
+
+    // move the background
+    this.background.tilePositionX += 4;
+
+    // remove pipes outside of the game
+    Phaser.Actions.Call(
+      this.pipes.getChildren(),
+      (pipe: Phaser.GameObjects.GameObject) => {
+        if ((pipe as Phaser.Physics.Arcade.Image).x < 0) {
+          this.pipes.remove(pipe);
+        }
+      },
+      this
+    );
   }
 }

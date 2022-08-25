@@ -1,7 +1,7 @@
 import { Kbd, Stack, Text } from "@chakra-ui/react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-import { useGame } from "lib/components/flappyBird/useGame";
+import { useFlappyBirdGame } from "lib/components/flappyBird/useGame";
 import { getAssetName, getNftHoldings } from "lib/utils/getNftHoldings";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 import { GAME, isNewUser } from "lib/utils/redis";
@@ -9,7 +9,7 @@ import { GAME, isNewUser } from "lib/utils/redis";
 const FlapSpacePage = ({
   imageLink,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  useGame(imageLink);
+  useFlappyBirdGame(imageLink);
   return (
     <Stack gap={5} alignItems="center">
       <Text>
@@ -22,7 +22,9 @@ const FlapSpacePage = ({
 
 export default FlapSpacePage;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<{
+  imageLink: string;
+}> = async (context) => {
   if (context.params?.game !== GAME) {
     return { notFound: true };
   }

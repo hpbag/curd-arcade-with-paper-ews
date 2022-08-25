@@ -1,6 +1,8 @@
 import type { Game, Types } from "phaser";
 import React, { useEffect, useRef } from "react";
 
+import { FLAPPY_BIRD_LOADING_SCENE } from "lib/constants/phaser";
+
 let phaser2: typeof Phaser;
 let config2: Types.Core.GameConfig;
 
@@ -13,7 +15,7 @@ async function getPhaserGameImports() {
   return { Phaser: phaser2, gameConfig: config2 };
 }
 
-export function useGame(skin?: string) {
+export function useFlappyBirdGame(skin: string) {
   const isInit = useRef(true);
   const [game, setGame] = React.useState<Game | undefined>(undefined);
   useEffect(() => {
@@ -22,7 +24,7 @@ export function useGame(skin?: string) {
         isInit.current = false;
         const { Phaser, gameConfig } = await getPhaserGameImports();
         const newGame = new Phaser.Game(gameConfig);
-        newGame.scene.start("LOADING_SCENE", { skin: skin || "buildspace" });
+        newGame.scene.start(FLAPPY_BIRD_LOADING_SCENE, { skin });
         setGame(newGame);
       }
     }

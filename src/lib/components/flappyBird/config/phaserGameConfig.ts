@@ -1,8 +1,8 @@
 import type { Types } from "phaser";
 
-import GameScene from "../GameScene";
-import LoadingScene from "../LoadingScene";
-import { GAME_HEIGHT, GAME_WIDTH } from "lib/constants/phaserConsts";
+import FlappyBirdGameScene from "../GameScene";
+import FlappyBirdLoadingScene from "../LoadingScene";
+import { GAME_HEIGHT, GAME_WIDTH } from "lib/constants/phaser";
 
 export const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -14,7 +14,7 @@ export const config: Types.Core.GameConfig = {
     height: GAME_HEIGHT,
   },
   parent: "game",
-  scene: [LoadingScene, GameScene],
+  scene: [FlappyBirdLoadingScene, FlappyBirdGameScene],
   input: {
     keyboard: true,
   },

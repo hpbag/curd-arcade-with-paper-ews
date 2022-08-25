@@ -19,8 +19,10 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setSize(25, 50).setScale(1.5); // .setScale(3); //.setOffset(0, 18)
+
     // create gravity
     this.setGravityY(1000);
+
     // for scene
     this.setCollideWorldBounds(true);
 
@@ -30,6 +32,7 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
 
     // texture
     this.textureName = texture;
+
     // orignal texture
     // this.play(this.textureName, true);
 
