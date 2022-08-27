@@ -1,3 +1,5 @@
+import type { AvailableGames } from "services/games";
+
 export const BASE_URL =
   process.env.NEXT_PUBLIC_NODE_ENV === "development"
     ? "http://localhost:3000"
@@ -8,6 +10,24 @@ export const REDIS_HOST =
     ? "localhost"
     : "srv-captain--curd-casino-redis";
 
+export const POLYGON_SCAN_TRANSACTION = (txHash: string) =>
+  `https://polygonscan.com/tx/${txHash}`;
+
+export const DISCORD_LINK = "https://discord.com/invite/qTP3czz9pE";
+
 export const ROUTE_TOURNAMENT_PAGE = (tournamentName: string) => {
-  return `/tournament/${encodeURIComponent(tournamentName)}`;
+  return `${BASE_URL}/tournament/${encodeURIComponent(tournamentName)}`;
+};
+export const ROUTE_LOGIN_PAGE = (redirectTo: string) => {
+  return `${BASE_URL}/login?redirect=${encodeURIComponent(redirectTo)}`;
+};
+export const ROUTE_GAME_PAGE = (
+  tournamentName: string,
+  gameSlug: AvailableGames
+) => {
+  return `${ROUTE_TOURNAMENT_PAGE(tournamentName)}/${gameSlug}`;
+};
+
+export const ROUTE_NFT_IMAGE_PREVIEW = (imageName: string) => {
+  return `${BASE_URL}/nft-preview/${encodeURIComponent(imageName)}`;
 };

@@ -3,7 +3,7 @@ import type { LoginPayload } from "@thirdweb-dev/sdk/dist/src/schema";
 import { serialize } from "cookie";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { isNewUser } from "lib/utils/redis";
+import { isNewUser } from "services/redis";
 
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {

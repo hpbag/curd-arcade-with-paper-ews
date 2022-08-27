@@ -1,34 +1,61 @@
 import { Kbd, Stack, Text } from "@chakra-ui/react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { z } from "zod";
 
 import { useFlappyBirdGame } from "lib/components/flappyBird/useGame";
+import { ROUTE_TOURNAMENT_PAGE } from "lib/constants/routes";
 import { getAssetName, getNftHoldings } from "lib/utils/getNftHoldings";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
-import { GAME, isNewUser } from "lib/utils/redis";
+import {
+  AvailableGames,
+  getTournamentGamesByTournamentAndGame,
+} from "services/games";
+import { isNewUser } from "services/redis";
+import { getTournamentBySlug } from "services/tournament";
 
-const FlapSpacePage = ({
+const GamePage = ({
   imageLink,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   useFlappyBirdGame(imageLink);
   return (
     <Stack gap={5} alignItems="center">
       <Text>
-        <Kbd>Space</Kbd> to jump a little or <Kbd>tap</Kbd> to jump a lot
+        <Kbd>Space</Kbd> or <Kbd>tap</Kbd> to jump!
       </Text>
       <div id="game-container" />
     </Stack>
   );
 };
 
-export default FlapSpacePage;
+export default GamePage;
+
+export const GameSearchSchema = z.object({
+  tournament: z.string(),
+  game: z.nativeEnum(AvailableGames),
+});
 
 export const getServerSideProps: GetServerSideProps<{
   imageLink: string;
 }> = async (context) => {
-  if (context.params?.game !== GAME) {
+  const gameSearchParamsParsed = GameSearchSchema.safeParse(context.params);
+  if (!gameSearchParamsParsed.success) {
+    console.error(gameSearchParamsParsed.error.format());
     return { notFound: true };
   }
-  const pathToComeBackTo = encodeURIComponent(`/play/${context.params?.game}`);
+
+  const gameSearchParams = gameSearchParamsParsed.data;
+  const gameDetails = await getTournamentGamesByTournamentAndGame(
+    gameSearchParams.tournament,
+    gameSearchParams.game
+  );
+  const tournament = await getTournamentBySlug(gameSearchParams.tournament);
+  if (!gameDetails || !tournament) {
+    return { notFound: true };
+  }
+
+  const pathToComeBackTo = encodeURIComponent(
+    `/tournament/${context.params?.tournament}/${context.params?.game}`
+  );
 
   try {
     const address = await getAddressFromCookies(context.req.cookies);
@@ -40,13 +67,14 @@ export const getServerSideProps: GetServerSideProps<{
         },
       };
     }
-    const nfts = await getNftHoldings(address);
+
+    const nfts = await getNftHoldings(tournament.nftContractAddress, address);
     if (nfts.length === 0) {
       return {
         redirect: {
-          destination: `/games/n%26w-buildspace?message=${encodeURIComponent(
-            "Purchase a character first!"
-          )}`,
+          destination: `${ROUTE_TOURNAMENT_PAGE(
+            gameSearchParams.tournament
+          )}?message=${encodeURIComponent("Purchase a character first!")}`,
           permanent: false,
         },
       };

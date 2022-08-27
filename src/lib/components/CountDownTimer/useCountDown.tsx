@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { DateStatus, getDateStatus } from "./useDateStatus";
+
 const getReturnValues = (countDown: number) => {
   // calculate time left
   const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
@@ -12,8 +14,22 @@ const getReturnValues = (countDown: number) => {
   return [days, hours, minutes, seconds];
 };
 
-export const useCountDown = (targetDate: number) => {
-  const countDownDate = new Date(targetDate).getTime();
+export const useCountDown = (dateStart: string, dateEnd: string) => {
+  const dateStatus = getDateStatus(new Date(dateStart), new Date(dateEnd));
+  let countDownDate: number;
+  switch (dateStatus) {
+    case DateStatus.ONGOING:
+    case DateStatus.ENDED: {
+      countDownDate = new Date(dateEnd).getTime();
+      break;
+    }
+    case DateStatus.UPCOMING: {
+      countDownDate = new Date(dateStart).getTime();
+      break;
+    }
+    default:
+      countDownDate = new Date(dateEnd).getTime();
+  }
 
   const [countDown, setCountDown] = useState(
     countDownDate - new Date().getTime()

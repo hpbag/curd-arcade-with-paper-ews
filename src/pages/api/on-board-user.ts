@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
-import { setNotifyMe, setUserTwitterHandle } from "lib/utils/redis";
+import { setNotifyMe, setUserTwitterHandle } from "services/redis";
 
 const onBoard = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {

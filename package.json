@@ -22,9 +22,11 @@
     "@chakra-ui/react": "^2.2.6",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
-    "@thirdweb-dev/react": "^2.6.3",
+    "@paperxyz/react-client-sdk": "^0.7.7",
+    "@thirdweb-dev/react": "^2.7.2",
     "@thirdweb-dev/sdk": "^2.3.36",
     "cookie": "^0.5.0",
+    "date-fns": "^2.29.2",
     "ethers": "^5.6.9",
     "framer-motion": "^6.5.1",
     "next": "^12.2.5",
@@ -33,7 +35,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
-    "redis": "^4.2.0"
+    "redis": "^4.2.0",
+    "zod": "^3.18.0"
   },
   "devDependencies": {
     "@types/cookie": "^0.5.1",

@@ -12,7 +12,7 @@ import {
   getUserScoreAndRank,
   getUserTwitterHandle,
   TOURNAMENT,
-} from "lib/utils/redis";
+} from "services/redis";
 
 export default function LeaderBoard({
   rows,

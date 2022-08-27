@@ -2,10 +2,21 @@ import { Flex, Heading } from "@chakra-ui/react";
 
 import DateTimeDisplay from "./DateTimeDisplay";
 import { useCountDown } from "./useCountDown";
+import { DateStatus, getDateStatus } from "./useDateStatus";
 
 const ExpiredNotice = () => {
-  return <Heading>Ended</Heading>;
+  return <Heading>Event Ended</Heading>;
 };
+
+function OngoingNotice() {
+  return <Heading>Ending in:</Heading>;
+}
+function UpcomingNotice() {
+  return <Heading>Starting in:</Heading>;
+}
+function DeterminingTime() {
+  return <Heading>Checking Timings...</Heading>;
+}
 
 const ShowCounter = ({
   days,
@@ -31,18 +42,43 @@ const ShowCounter = ({
   );
 };
 
-export const CountDownTimer = ({ targetDate }: { targetDate: number }) => {
-  const [days, hours, minutes, seconds] = useCountDown(targetDate);
+export const CountDownTimer = ({
+  dateStart,
+  dateEnd,
+}: {
+  dateStart: string;
+  dateEnd: string;
+}) => {
+  const dateStatus = getDateStatus(new Date(dateStart), new Date(dateEnd));
+  const [days, hours, minutes, seconds] = useCountDown(dateStart, dateEnd);
 
   if (days + hours + minutes + seconds <= 0) {
     return <ExpiredNotice />;
   }
+
+  let CountdownHeader: React.ReactNode;
+  switch (dateStatus) {
+    case DateStatus.ENDED:
+      return <ExpiredNotice />;
+    case DateStatus.ONGOING:
+      CountdownHeader = OngoingNotice();
+      break;
+    case DateStatus.UPCOMING:
+      CountdownHeader = UpcomingNotice();
+      break;
+    default:
+      CountdownHeader = DeterminingTime();
+  }
+
   return (
-    <ShowCounter
-      days={days}
-      hours={hours}
-      minutes={minutes}
-      seconds={seconds}
-    />
+    <>
+      {CountdownHeader}
+      <ShowCounter
+        days={days}
+        hours={hours}
+        minutes={minutes}
+        seconds={seconds}
+      />
+    </>
   );
 };

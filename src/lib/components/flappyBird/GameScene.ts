@@ -1,3 +1,5 @@
+import Router from "next/router";
+
 import {
   FLAPPY_BIRD_GAME_SCENE,
   GAME_HEIGHT,
@@ -81,7 +83,7 @@ export default class FlappyBirdGameScene extends Phaser.Scene {
         credentials: "include",
       }).then((resp) => {
         if (resp.ok) {
-          window.location.assign(`${BASE_URL}/leader-board/flap-space`);
+          Router.push(`${BASE_URL}/leader-board/flap-space`);
         } else {
           resp.json().then((result) => {
             console.log("Error", result.error);

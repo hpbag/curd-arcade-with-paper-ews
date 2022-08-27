@@ -6,7 +6,7 @@ import {
   getUserTwitterHandle,
   setLeaderScore,
   TOURNAMENT,
-} from "lib/utils/redis";
+} from "services/redis";
 
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {

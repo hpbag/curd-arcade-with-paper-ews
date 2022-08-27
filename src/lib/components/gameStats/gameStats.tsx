@@ -7,8 +7,8 @@ export interface IGameStatsProps {
   nftContractAddress: string;
   treasuryAddress: string;
   tokenContractAddress: string;
-  participantsOverride?: number;
-  prizePoolOverride?: number;
+  participantsOverride: number | null;
+  prizePoolOverride: number | null;
 }
 export const GameStats = ({
   nftContractAddress,

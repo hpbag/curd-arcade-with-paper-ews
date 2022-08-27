@@ -18,7 +18,7 @@ export const Board = ({
 }: {
   game: string;
   rows: { value: string; score: number }[];
-  user?: { value: string; rank: number; score: number };
+  user?: { value: string; rank: number | null; score: number | null };
 }) => {
   const [isUserInList, setIsUserInList] = useState(false);
   return (
