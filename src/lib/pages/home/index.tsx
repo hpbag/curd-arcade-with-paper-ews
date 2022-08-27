@@ -11,9 +11,8 @@ import { useRouter } from "next/router";
 
 import type { IGameStatsProps } from "lib/components/gameStats/gameStats";
 import { GameStats } from "lib/components/gameStats/gameStats";
-import MotionBox from "lib/components/motion/Box";
-import { BASE_URL } from "lib/constants/routes";
 import type { getServerSideProps } from "pages";
+import type { Tournament } from "services/tournament";
 
 export type TournamentCardProps = {
   imageUrl: string;
@@ -25,11 +24,16 @@ export function TournamentCard({
   imageUrl,
   title,
   tournamentLink,
-  ...gameStatProps
-}: TournamentCardProps) {
+
+  nftContractAddress,
+  tokenContractAddress,
+  treasuryAddress,
+  participantsOverride,
+  prizePoolOverride,
+}: Tournament) {
   const router = useRouter();
   const routeToTournament = () => {
-    const url = new URL(tournamentLink, BASE_URL);
+    const url = new URL(tournamentLink);
     router.push(url);
   };
   const bgColor = useColorModeValue("white", "#323232");
@@ -49,12 +53,18 @@ export function TournamentCard({
       }}
       onClick={routeToTournament}
     >
-      <Image src={imageUrl} w={48} h-={48} rounded="lg" />
+      <Image src={imageUrl} w={48} h={48} rounded="lg" />
       <Stack align="start" h="100%" w="100%">
         <Heading as="h2" fontSize="2xl" mb={5}>
           {title}
         </Heading>
-        <GameStats {...gameStatProps} />
+        <GameStats
+          nftContractAddress={nftContractAddress}
+          tokenContractAddress={tokenContractAddress}
+          treasuryAddress={treasuryAddress}
+          participantsOverride={participantsOverride}
+          prizePoolOverride={prizePoolOverride}
+        />
       </Stack>
     </Flex>
   );
@@ -65,7 +75,7 @@ export function TournamentSection({
   tournaments,
 }: {
   sectionTitle: string;
-  tournaments: TournamentCardProps[];
+  tournaments: Tournament[];
 }) {
   const tournamentDisplays = tournaments.map((tournament) => {
     return <TournamentCard {...tournament} />;
@@ -92,12 +102,12 @@ const Home = ({
   });
 
   return (
-    <MotionBox initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <>
       <NextSeo title="Home" />
       <Stack minHeight="80vh" gap={20} my={8} w="full">
         {sectionComponent}
       </Stack>
-    </MotionBox>
+    </>
   );
 };
 

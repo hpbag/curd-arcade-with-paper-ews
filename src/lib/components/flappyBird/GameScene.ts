@@ -1,9 +1,12 @@
+import Router from "next/router";
+
 import {
   FLAPPY_BIRD_GAME_SCENE,
   GAME_HEIGHT,
   GAME_WIDTH,
 } from "lib/constants/phaser";
-import { BASE_URL } from "lib/constants/routes";
+import { ROUTE_LEADERBOARD_PAGE } from "lib/constants/routes";
+import { GameSearchSchema } from "pages/tournament/[tournament]/[game]";
 
 import { Pipe } from "./objects/Pipe";
 import { PlayerSprite } from "./objects/Player";
@@ -67,6 +70,11 @@ export default class FlappyBirdGameScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.pipes, () => {
       // stopping the game
       this.scene.pause();
+      const parsedQuery = GameSearchSchema.safeParse(Router.query);
+      if (!parsedQuery.success) {
+        return;
+      }
+      const { game, tournament } = parsedQuery.data;
       fetch("/api/game-over", {
         method: "POST",
         headers: {
@@ -77,11 +85,13 @@ export default class FlappyBirdGameScene extends Phaser.Scene {
             this.registry.values.score.toString(),
             "utf-8"
           ).toString("base64"),
+          game,
+          tournament,
         }),
         credentials: "include",
       }).then((resp) => {
         if (resp.ok) {
-          window.location.assign(`${BASE_URL}/leader-board/flap-space`);
+          Router.push(ROUTE_LEADERBOARD_PAGE(tournament, game));
         } else {
           resp.json().then((result) => {
             console.log("Error", result.error);

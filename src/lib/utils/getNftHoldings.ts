@@ -1,10 +1,11 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
-export async function getNftHoldings(walletAddress: string) {
+export async function getNftHoldings(
+  contractAddress: string,
+  walletAddress: string
+) {
   const sdk = new ThirdwebSDK("polygon");
-  const edition = sdk.getEditionDrop(
-    "0xC50Ee7a95AEcEb509f305AAff326481001A5D5b6"
-  );
+  const edition = sdk.getEditionDrop(contractAddress);
   return edition.getOwned(walletAddress);
 }
 

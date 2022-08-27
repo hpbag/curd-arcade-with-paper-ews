@@ -20,7 +20,7 @@ export default class FlappyBirdLoadingScene extends Phaser.Scene {
 
     this.load.image({
       key: this.skin,
-      url: `/character_images/${this.skin}.png`,
+      url: `/character-images/${this.skin}.png`,
     });
   }
 
