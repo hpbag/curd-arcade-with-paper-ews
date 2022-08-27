@@ -13,11 +13,13 @@ export function NativeMintButton({
   title,
   contractAddress,
   contractArgs,
+  onSuccess,
   ...props
 }: {
   title: string;
   contractAddress: string;
   contractArgs: { tokenId: number };
+  onSuccess: () => void;
 } & ButtonProps) {
   const address = useAddress();
   const editionDropContract = useEditionDrop(contractAddress);
@@ -31,9 +33,9 @@ export function NativeMintButton({
     }
     claimNft(
       {
-        to: contractAddress,
+        to: address,
         quantity: 1,
-        tokenId: 1,
+        tokenId: contractArgs.tokenId,
         checkERC20Allowance: true,
       },
       {
@@ -54,8 +56,9 @@ export function NativeMintButton({
           });
         },
         onSuccess(data) {
-          const { transactionHash } = data.receipt;
+          onSuccess();
 
+          const { transactionHash } = data.receipt;
           toast({
             title: `Successfully minted ${title}`,
             description: (

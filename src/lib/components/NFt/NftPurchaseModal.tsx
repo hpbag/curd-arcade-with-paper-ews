@@ -11,7 +11,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-import { NativeMintButton } from "./nativeMintButton";
+import { NativeMintButton } from "./NativeMintButton";
 import type { NftCardProps } from "./NftCard";
 
 export function PurchaseNftModal({
@@ -21,6 +21,7 @@ export function PurchaseNftModal({
   purchaseId,
   contractAddress,
   title,
+  contractArgs,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -49,7 +50,8 @@ export function PurchaseNftModal({
           <Stack w="100%" align="center">
             <NativeMintButton
               contractAddress={contractAddress}
-              contractArgs={{ tokenId: 1 }}
+              contractArgs={contractArgs}
+              onSuccess={onClose}
               title={title}
               w={56}
             >

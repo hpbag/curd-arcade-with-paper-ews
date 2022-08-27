@@ -15,6 +15,7 @@ export interface NftCardProps {
   title: string;
   purchaseId: string;
   contractAddress: string;
+  contractArgs: { tokenId: number };
 }
 
 const PLAYER_QUERY = "player";
@@ -24,6 +25,7 @@ export function NftCard({
   title,
   purchaseId,
   contractAddress,
+  contractArgs,
 }: NftCardProps) {
   const bgColor = useColorModeValue("white", "#323232");
   const { onOpen, onClose, isOpen: isPurchaseNftModalOpen } = useDisclosure();
@@ -73,6 +75,7 @@ export function NftCard({
         title={title}
         purchaseId={purchaseId}
         imageUrl={imageUrl}
+        contractArgs={contractArgs}
         contractAddress={contractAddress}
         isOpen={isPurchaseNftModalOpen}
         onClose={onCloseNftPurchaseModal}

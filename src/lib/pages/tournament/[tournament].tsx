@@ -101,6 +101,7 @@ export const TournamentPage = ({
             return (
               <NftCard
                 contractAddress={nft.contractAddress}
+                contractArgs={nft.contractArgs}
                 imageUrl={nft.imageUrl}
                 title={nft.title}
                 purchaseId={nft.paperId}

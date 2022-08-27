@@ -1,18 +1,22 @@
-import { Button, Link, Stack } from "@chakra-ui/react";
+import { Button, Stack } from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import type { ComponentProps } from "react";
 import { useEffect, useRef } from "react";
+import { FaDiscord } from "react-icons/fa";
 
+import { ROUTE_GAME_PAGE } from "lib/constants/routes";
 import { Board } from "lib/pages/leader-board/board";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
+import { getTournamentGamesByTournamentAndGame } from "services/games";
 import {
-  GAME,
   getTopXScores,
   getUserScoreAndRank,
   getUserTwitterHandle,
-  TOURNAMENT,
 } from "services/redis";
+import { getTournamentBySlug } from "services/tournament";
+
+import { GameSearchSchema } from ".";
 
 export default function LeaderBoard({
   rows,
@@ -31,44 +35,67 @@ export default function LeaderBoard({
     <Stack alignItems="center" gap={8}>
       <Button
         ref={replayButtonRef}
+        colorScheme="orange"
         w="100%"
         maxW="md"
         mt={20}
         onClick={() => {
-          router.push("/play/flap-space");
+          const parsedData = GameSearchSchema.safeParse(router.query);
+          if (!parsedData.success) {
+            return;
+          }
+          const { game, tournament } = parsedData.data;
+          router.push(ROUTE_GAME_PAGE(tournament, game));
         }}
       >
         Play Again
       </Button>
+      <Button leftIcon={<FaDiscord />} variant="solid">
+        Join Discord to know when you get your money
+      </Button>
       <Board rows={rows} user={user} game="Flap Bird" />
-      <Link href="https://twitter.com/curd_inc" isExternal>
-        Follow us on twitter
-      </Link>
     </Stack>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (context.params?.game !== GAME) {
+  const gameSearchParamsParsed = GameSearchSchema.safeParse(context.params);
+  if (!gameSearchParamsParsed.success) {
+    console.error(gameSearchParamsParsed.error.format());
     return { notFound: true };
   }
+
+  const gameSearchParams = gameSearchParamsParsed.data;
+  const gameDetails = await getTournamentGamesByTournamentAndGame(
+    gameSearchParams.tournament,
+    gameSearchParams.game
+  );
+  const tournament = await getTournamentBySlug(gameSearchParams.tournament);
+  if (!gameDetails || !tournament) {
+    return { notFound: true };
+  }
+
   try {
     const address = await getAddressFromCookies(context.req.cookies);
     const handle = await getUserTwitterHandle(address || "");
     if (!handle) {
       throw new Error("Missing handle");
     }
-    const { rank, score } = await getUserScoreAndRank(GAME, TOURNAMENT, handle);
+    const { rank, score } = await getUserScoreAndRank(
+      gameDetails.slug,
+      tournament.slug,
+      handle
+    );
     const result = await getTopXScores(
-      GAME,
-      TOURNAMENT,
+      gameDetails.slug,
+      tournament.slug,
       parseInt(process.env.LEADER_BOARD_PLAYERS as string, 10)
     );
     return { props: { user: { value: handle, rank, score }, rows: result } };
   } catch (e) {
     const result = await getTopXScores(
-      GAME,
-      TOURNAMENT,
+      gameDetails.slug,
+      tournament.slug,
       parseInt(process.env.LEADER_BOARD_PLAYERS as string, 10)
     );
     return { props: { rows: result } };

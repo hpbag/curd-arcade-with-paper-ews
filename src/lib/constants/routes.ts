@@ -14,6 +14,7 @@ export const POLYGON_SCAN_TRANSACTION = (txHash: string) =>
   `https://polygonscan.com/tx/${txHash}`;
 
 export const DISCORD_LINK = "https://discord.com/invite/qTP3czz9pE";
+export const TWITTER_LINK = "https://twitter.com/curd_inc";
 
 export const ROUTE_TOURNAMENT_PAGE = (tournamentName: string) => {
   return `${BASE_URL}/tournament/${encodeURIComponent(tournamentName)}`;
@@ -26,6 +27,12 @@ export const ROUTE_GAME_PAGE = (
   gameSlug: AvailableGames
 ) => {
   return `${ROUTE_TOURNAMENT_PAGE(tournamentName)}/${gameSlug}`;
+};
+export const ROUTE_LEADERBOARD_PAGE = (
+  tournamentName: string,
+  gameSlug: AvailableGames
+) => {
+  return `${ROUTE_GAME_PAGE(tournamentName, gameSlug)}/leaderboard`;
 };
 
 export const ROUTE_NFT_IMAGE_PREVIEW = (imageName: string) => {

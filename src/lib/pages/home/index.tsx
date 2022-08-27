@@ -53,7 +53,7 @@ export function TournamentCard({
       }}
       onClick={routeToTournament}
     >
-      <Image src={imageUrl} w={48} h-={48} rounded="lg" />
+      <Image src={imageUrl} w={48} h={48} rounded="lg" />
       <Stack align="start" h="100%" w="100%">
         <Heading as="h2" fontSize="2xl" mb={5}>
           {title}
