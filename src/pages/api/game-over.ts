@@ -1,3 +1,4 @@
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
@@ -11,6 +12,12 @@ const gameOver = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const address = await getAddressFromCookies(req.cookies);
+  const thirdwebSdk = new ThirdwebSDK("polygon");
+  const editionDrop = thirdwebSdk.getEditionDrop(
+    "0xC50Ee7a95AEcEb509f305AAff326481001A5D5b6"
+  );
+  const ownedNfts = await editionDrop.getOwned(address);
+  console.log("ownedNfts", ownedNfts);
 
   // Get signed login payload from the frontend
   const payload = req.body as {
@@ -33,12 +40,10 @@ const gameOver = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!handle) {
       throw new Error("Missing handle");
     }
-    const resp = await setLeaderScore(
-      game,
-      tournament,
-      handle,
-      parseInt(score, 10)
-    );
+    const finalScore = !ownedNfts.length
+      ? parseInt(score, 10)
+      : parseInt(score, 10) * 1.1;
+    const resp = await setLeaderScore(game, tournament, handle, finalScore);
 
     return res.status(200).json({ resp });
   } catch (e) {

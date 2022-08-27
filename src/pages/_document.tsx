@@ -5,7 +5,7 @@ import Document, { Head, Html, Main, NextScript } from "next/document";
 
 import customTheme from "lib/styles/theme";
 
-const APP_NAME = "nextarter-chakra";
+const APP_NAME = "Curd Arcade";
 
 class MyDocument extends Document {
   static getInitialProps(ctx: DocumentContext) {

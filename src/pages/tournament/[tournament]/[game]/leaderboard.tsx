@@ -50,7 +50,12 @@ export default function LeaderBoard({
       >
         Play Again
       </Button>
-      <Button leftIcon={<FaDiscord />} variant="solid">
+      <Button
+        leftIcon={<FaDiscord />}
+        variant="solid"
+        whiteSpace="initial"
+        p={5}
+      >
         Join Discord to know when you get your money
       </Button>
       <Board rows={rows} user={user} game="Flap Bird" />

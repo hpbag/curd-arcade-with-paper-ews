@@ -12,6 +12,8 @@ export async function getTournaments() {
   return [
     {
       title: "To Be Revealed",
+      description:
+        "Big things coming. Alpha drop: Holding the previous two event's NFTs is going to help.",
       // unique
       slug: upcomingEventSlug,
       imageUrl: "/tournament-logo/question-mark.png",
@@ -31,6 +33,7 @@ export async function getTournaments() {
     },
     {
       title: "Web3Sf Speakers",
+      description: `We're doing something a little different for this event! The sum of everyone's score with the same NFT will determine the winning group. What do you win? The other NFT holder's buy-in scaled according to your score. Choose wisely.`,
       slug: web3Slug,
       imageUrl: "/tournament-logo/web3sf.svg",
       participantsOverride: null,
@@ -44,6 +47,7 @@ export async function getTournaments() {
     },
     {
       title: "BuildSpace Flap Off",
+      description: "Free for all.",
       slug: buildspaceNWSlug,
       imageUrl: "/tournament-logo/buildspace.png",
       participantsOverride: 14,

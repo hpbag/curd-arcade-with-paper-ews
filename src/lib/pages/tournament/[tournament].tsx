@@ -4,6 +4,7 @@ import {
   Heading,
   Image,
   Stack,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import { isAfter, isBefore } from "date-fns";
@@ -12,7 +13,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import { Board } from "../leader-board/board";
-import { CountDownTimer } from "lib/components/CountDownTimer/CountdownTimer";
+import { CountDownTimer } from "lib/components/countDownTimer/CountdownTimer";
+import { LoyaltyBoost } from "lib/components/loyaltyBoost/LoyaltyBoost";
 import { NftCard } from "lib/components/NFt/NftCard";
 import { ROUTE_GAME_PAGE } from "lib/constants/routes";
 import type { getServerSideProps } from "pages/tournament/[tournament]/index";
@@ -63,6 +65,25 @@ export const TournamentPage = ({
         <Heading pb={2} fontSize={{ base: "2xl", md: "4xl" }}>
           {tournament.title}
         </Heading>
+        {tournament.slug === "web3sf" ? (
+          <>
+            <Text>
+              We&apos;re doing something a little different for this event!{" "}
+            </Text>
+            <Text>
+              The sum of everyone&apos;s score with the same NFT will determine
+              the winning group.
+            </Text>
+            <Text>
+              What do you win? The other NFT holder&apos;s buy-in scaled
+              according to your score.
+            </Text>
+            <Text>Team scoreboard coming soon!</Text>
+            <Text>Choose wisely.</Text>
+          </>
+        ) : (
+          <Text>{tournament.description}</Text>
+        )}
       </Flex>
 
       <Stack alignItems="center" gap={4}>
@@ -76,6 +97,9 @@ export const TournamentPage = ({
           >
             Play Now
           </Button>
+        ) : null}
+        {tournament.slug === "web3sf" ? (
+          <LoyaltyBoost contractAddress="0xC50Ee7a95AEcEb509f305AAff326481001A5D5b6" />
         ) : null}
         <CountDownTimer
           dateStart={tournament.dateStart}
