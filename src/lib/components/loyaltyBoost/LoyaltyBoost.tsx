@@ -1,4 +1,4 @@
-import { Spinner, Text } from "@chakra-ui/react";
+import { Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 import { useAddress, useEditionDrop, useOwnedNFTs } from "@thirdweb-dev/react";
 
 import { ThirdWebConnectWalletButton } from "../connectWallet/ThirdWebConnectWalletButton";
@@ -19,19 +19,30 @@ export const LoyaltyBoost = ({ contractAddress }: LoyaltyBoostProps) => {
     console.error(error);
   }
   if (!address) {
-    return <ThirdWebConnectWalletButton />;
+    return (
+      <Stack align="center">
+        <Heading fontSize="lg">See Your Power-Up</Heading>
+        <ThirdWebConnectWalletButton />
+      </Stack>
+    );
   }
   if (isLoading) {
     return <Spinner />;
   }
 
   if (!ownedNFTs || !ownedNFTs.length) {
-    return <Text>No bonus this tournament</Text>;
+    return (
+      <Text>
+        Unfortunately, you don&apos;t have any existing NFTs. Join this round to
+        get in on the next one!
+      </Text>
+    );
   }
 
   return (
     <Text>
-      As Buildspace Flap Off holder, you enjoy a 110% multiplier on your scores!
+      As Buildspace Flap Off NFT holder, you enjoy a 1.1 multiplier on your
+      scores!
     </Text>
   );
 };

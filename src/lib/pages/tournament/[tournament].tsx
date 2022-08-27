@@ -3,6 +3,7 @@ import {
   Flex,
   Heading,
   Image,
+  Link,
   Stack,
   Text,
   useToast,
@@ -16,7 +17,7 @@ import { Board } from "../leader-board/board";
 import { CountDownTimer } from "lib/components/countDownTimer/CountdownTimer";
 import { LoyaltyBoost } from "lib/components/loyaltyBoost/LoyaltyBoost";
 import { NftCard } from "lib/components/NFt/NftCard";
-import { ROUTE_GAME_PAGE } from "lib/constants/routes";
+import { DISCORD_LINK, ROUTE_GAME_PAGE } from "lib/constants/routes";
 import type { getServerSideProps } from "pages/tournament/[tournament]/index";
 
 export const TournamentPage = ({
@@ -53,7 +54,7 @@ export const TournamentPage = ({
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        p={{ base: 5 }}
+        p={{ base: 4 }}
         gap={5}
       >
         <Image
@@ -74,12 +75,10 @@ export const TournamentPage = ({
               The sum of everyone&apos;s score with the same NFT will determine
               the winning group.
             </Text>
-            <Text>
-              What do you win? The other NFT holder&apos;s buy-in scaled
-              according to your score.
-            </Text>
-            <Text>Team scoreboard coming soon!</Text>
-            <Text>Choose wisely.</Text>
+            <Link href={DISCORD_LINK} isExternal>
+              <u>Join our discord for the most up to date information</u>
+            </Link>
+            <Text>May the best team win! Team scoreboard coming soon!</Text>
           </>
         ) : (
           <Text>{tournament.description}</Text>
