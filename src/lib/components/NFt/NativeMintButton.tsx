@@ -1,6 +1,13 @@
 import type { ButtonProps } from "@chakra-ui/react";
 import { Button, Link, Text, useToast } from "@chakra-ui/react";
-import { useAddress, useClaimNFT, useEditionDrop } from "@thirdweb-dev/react";
+import {
+  ChainId,
+  useAddress,
+  useClaimNFT,
+  useEditionDrop,
+  useNetwork,
+  useNetworkMismatch,
+} from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 
 import {
@@ -22,15 +29,32 @@ export function NativeMintButton({
   onSuccess: () => void;
 } & ButtonProps) {
   const address = useAddress();
+  const isMismatched = useNetworkMismatch();
   const editionDropContract = useEditionDrop(contractAddress);
   const { mutate: claimNft, isLoading } = useClaimNFT(editionDropContract);
+
+  const [, switchNetwork] = useNetwork();
+
   const toast = useToast();
   const router = useRouter();
+  const onSwitchNetwork = () => {
+    if (!switchNetwork) {
+      toast({
+        status: "error",
+        title: "Cannot Switch Network automatically",
+        description: "Please make sure that you are on Polygon and try again",
+      });
+      return;
+    }
+    switchNetwork(ChainId.Polygon);
+  };
+
   const onNativeMintClick = async () => {
     if (!address) {
       router.push(ROUTE_LOGIN_PAGE(router.asPath));
       return;
     }
+
     claimNft(
       {
         to: address,
@@ -79,7 +103,9 @@ export function NativeMintButton({
       }
     );
   };
-  return (
+  return isMismatched ? (
+    <Button onClick={onSwitchNetwork}>Switch Network</Button>
+  ) : (
     <Button {...props} isLoading={isLoading} onClick={onNativeMintClick} />
   );
 }
