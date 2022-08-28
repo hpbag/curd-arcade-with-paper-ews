@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 import { useEffect, useRef } from "react";
 import { FaDiscord } from "react-icons/fa";
 
-import { ROUTE_GAME_PAGE } from "lib/constants/routes";
+import { DISCORD_LINK, ROUTE_GAME_PAGE } from "lib/constants/routes";
 import { Board } from "lib/pages/leader-board/board";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 import { getTournamentGamesByTournamentAndGame } from "services/games";
@@ -55,6 +55,9 @@ export default function LeaderBoard({
         variant="solid"
         whiteSpace="initial"
         p={5}
+        onClick={() => {
+          window.open(DISCORD_LINK, "_blank");
+        }}
       >
         Join Discord to know when you get your money
       </Button>
