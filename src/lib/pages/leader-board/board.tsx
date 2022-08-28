@@ -45,7 +45,7 @@ export const Board = ({
                 <Tr key={row.value}>
                   <Td isNumeric>{index + 1}</Td>
                   <Td>{row.value}</Td>
-                  <Td isNumeric>{row.score}</Td>
+                  <Td isNumeric>{Math.round((row.score || 0) * 10) / 10}</Td>
                 </Tr>
               );
             })}
@@ -59,7 +59,7 @@ export const Board = ({
                 <Tr>
                   <Td isNumeric>{user.rank}</Td>
                   <Td>{user.value}</Td>
-                  <Td isNumeric>{user.score}</Td>
+                  <Td isNumeric>{Math.round((user.score || 0) * 10) / 10}</Td>
                 </Tr>
               </>
             )}
