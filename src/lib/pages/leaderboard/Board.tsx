@@ -1,5 +1,6 @@
 import {
   Heading,
+  Stack,
   Table,
   TableContainer,
   Tbody,
@@ -22,7 +23,7 @@ export const Board = ({
 }) => {
   const [isUserInList, setIsUserInList] = useState(false);
   return (
-    <>
+    <Stack align="center">
       <Heading textAlign="center" fontSize={{ base: "2xl", md: "3xl" }}>
         {game} Leader Board
       </Heading>
@@ -69,6 +70,6 @@ export const Board = ({
       <Text fontSize="xs" opacity={0.6}>
         Rank for same scoring users is not reflective of actual position
       </Text>
-    </>
+    </Stack>
   );
 };

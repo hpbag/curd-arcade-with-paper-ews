@@ -1,6 +1,7 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import { getAssetName } from "lib/utils/getNftHoldings";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 import { getUserTwitterHandle, setLeaderScore } from "services/redis";
 
@@ -17,7 +18,29 @@ const gameOver = async (req: NextApiRequest, res: NextApiResponse) => {
     "0xC50Ee7a95AEcEb509f305AAff326481001A5D5b6"
   );
   const ownedNfts = await editionDrop.getOwned(address);
-  console.log("ownedNfts", ownedNfts);
+
+  const web3SfEditionDrop = thirdwebSdk.getEditionDrop(
+    "0x96559A1c39Ba491cb2b94A40CCee7Bb8DAdd574F"
+  );
+  const gameNfts = await web3SfEditionDrop.getOwned(address);
+  const name = getAssetName(gameNfts);
+  let team = "";
+  switch (name) {
+    case "james":
+      team = "Team Paper";
+      break;
+    case "jake":
+      team = "Team thirdweb";
+      break;
+    case "shaan":
+      team = "Team Milk Road";
+      break;
+    case "farza":
+      team = "Team BuildSpace";
+      break;
+    default:
+      break;
+  }
 
   // Get signed login payload from the frontend
   const payload = req.body as {
@@ -43,7 +66,14 @@ const gameOver = async (req: NextApiRequest, res: NextApiResponse) => {
     const finalScore = !ownedNfts.length
       ? parseInt(score, 10)
       : parseInt(score, 10) * 1.1;
-    const resp = await setLeaderScore(game, tournament, handle, finalScore);
+    const resp = await setLeaderScore({
+      game,
+      tournament,
+      userId: handle,
+      score: finalScore,
+      walletAddress: address,
+      team,
+    });
 
     return res.status(200).json({ resp });
   } catch (e) {

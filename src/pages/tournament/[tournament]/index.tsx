@@ -21,10 +21,14 @@ export const getServerSideProps: GetServerSideProps<{
     rank: number | null;
     score: number | null;
     value: string;
+    team: string | undefined;
+    walletAddress: string | undefined;
   };
   rows: {
     score: number;
     value: string;
+    team: string | undefined;
+    walletAddress: string | undefined;
   }[];
   nfts: Nfts;
   tournament: Tournament;
@@ -47,7 +51,7 @@ export const getServerSideProps: GetServerSideProps<{
     if (!handle) {
       throw new Error("Missing handle");
     }
-    const { rank, score } = await getUserScoreAndRank(
+    const values = await getUserScoreAndRank(
       game.slug || "",
       tournament.slug,
       handle
@@ -60,7 +64,7 @@ export const getServerSideProps: GetServerSideProps<{
     console.log("result", result);
     return {
       props: {
-        user: { value: handle, rank, score },
+        user: { value: handle, ...values },
         rows: result,
         nfts,
         tournament,

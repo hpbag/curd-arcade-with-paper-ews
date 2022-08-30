@@ -13,12 +13,14 @@ import type { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import { Board } from "../leader-board/board";
+import { Board } from "../leaderboard/Board";
+import { TeamBoard } from "../leaderboard/TeamBoard";
 import { CountDownTimer } from "lib/components/countDownTimer/CountdownTimer";
 import { LoyaltyBoost } from "lib/components/loyaltyBoost/LoyaltyBoost";
 import { NftCard } from "lib/components/NFt/NftCard";
 import { DISCORD_LINK, ROUTE_GAME_PAGE } from "lib/constants/routes";
 import type { getServerSideProps } from "pages/tournament/[tournament]/index";
+import { web3Slug } from "services/tournament";
 
 export const TournamentPage = ({
   rows,
@@ -134,7 +136,9 @@ export const TournamentPage = ({
           })}
         </Flex>
       </Stack>
-
+      {router.query.tournament === web3Slug && (
+        <TeamBoard rows={rows} user={user} />
+      )}
       <Board rows={rows} user={user} game={game.name} />
     </Flex>
   );

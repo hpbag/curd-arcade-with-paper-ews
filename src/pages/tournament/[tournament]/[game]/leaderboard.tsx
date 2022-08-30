@@ -6,7 +6,8 @@ import { useEffect, useRef } from "react";
 import { FaDiscord } from "react-icons/fa";
 
 import { DISCORD_LINK, ROUTE_GAME_PAGE } from "lib/constants/routes";
-import { Board } from "lib/pages/leader-board/board";
+import { Board } from "lib/pages/leaderboard/Board";
+import { TeamBoard } from "lib/pages/leaderboard/TeamBoard";
 import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 import { getTournamentGamesByTournamentAndGame } from "services/games";
 import {
@@ -14,14 +15,14 @@ import {
   getUserScoreAndRank,
   getUserTwitterHandle,
 } from "services/redis";
-import { getTournamentBySlug } from "services/tournament";
+import { getTournamentBySlug, web3Slug } from "services/tournament";
 
 import { GameSearchSchema } from ".";
 
 export default function LeaderBoard({
   rows,
   user,
-}: ComponentProps<typeof Board>) {
+}: ComponentProps<typeof TeamBoard>) {
   const router = useRouter();
   const replayButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -61,6 +62,9 @@ export default function LeaderBoard({
       >
         Join Discord to know when you get your money
       </Button>
+      {router.query.tournament === web3Slug && (
+        <TeamBoard rows={rows} user={user} />
+      )}
       <Board rows={rows} user={user} game="Flap Bird" />
     </Stack>
   );
@@ -89,7 +93,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!handle) {
       throw new Error("Missing handle");
     }
-    const { rank, score } = await getUserScoreAndRank(
+    const values = await getUserScoreAndRank(
       gameDetails.slug,
       tournament.slug,
       handle
@@ -99,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       tournament.slug,
       parseInt(process.env.LEADER_BOARD_PLAYERS as string, 10)
     );
-    return { props: { user: { value: handle, rank, score }, rows: result } };
+    return { props: { user: { value: handle, ...values }, rows: result } };
   } catch (e) {
     const result = await getTopXScores(
       gameDetails.slug,

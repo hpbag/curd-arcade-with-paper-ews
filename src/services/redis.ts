@@ -19,19 +19,51 @@ export async function getRedisClient() {
   return client;
 }
 
-export const GAME = "flap-space";
-export const TOURNAMENT = "n&w-buildspace";
+const UserKeyParams = {
+  walletAddress: "walletAddress",
+  team: "team",
+  twitterHandle: "twitterHandle",
+  notifyMe: "notifyMe",
+};
+
+export async function getUserWalletAndTeam(twitterHandle: string) {
+  const redisClient = await getRedisClient();
+  const team = await redisClient.hGet(twitterHandle, UserKeyParams.team);
+  const walletAddress = await redisClient.hGet(
+    twitterHandle,
+    UserKeyParams.walletAddress
+  );
+  return { team, walletAddress };
+}
+
 export function getLeaderBoardKey(game: string, tournament: string) {
   return `leaderBoard:${game}:${tournament}`;
 }
 
-export async function setLeaderScore(
-  game: string,
-  tournament: string,
-  userId: string,
-  score: number
-) {
+export async function setLeaderScore({
+  game,
+  score,
+  tournament,
+  userId,
+  walletAddress,
+  team,
+}: {
+  game: string;
+  tournament: string;
+  userId: string;
+  walletAddress: string;
+  score: number;
+  team?: string;
+}) {
   const leaderBoardKey = getLeaderBoardKey(game, tournament);
+  const redisClient = await getRedisClient();
+  const result1 = redisClient.hSet(
+    userId,
+    UserKeyParams.walletAddress,
+    walletAddress
+  );
+  const result2 = redisClient.hSet(userId, UserKeyParams.team, team || "");
+  await Promise.all([result1, result2]);
   return (await getRedisClient()).zAdd(
     leaderBoardKey,
     [{ score, value: userId }],
@@ -50,8 +82,14 @@ export async function getUserScoreAndRank(
   const redisClient = await getRedisClient();
   const rankResp = redisClient.zRevRank(leaderBoardKey, userId);
   const scoreResp = redisClient.zmScore(leaderBoardKey, userId);
-  const [rank, score] = await Promise.all([rankResp, scoreResp]);
-  return { rank, score: score[0] };
+  const detailsResp = getUserWalletAndTeam(userId);
+
+  const [rank, score, details] = await Promise.all([
+    rankResp,
+    scoreResp,
+    detailsResp,
+  ]);
+  return { rank, score: score[0], ...details };
 }
 
 export async function getTopXScores(
@@ -60,18 +98,23 @@ export async function getTopXScores(
   topX: number
 ) {
   const leaderBoardKey = getLeaderBoardKey(game, tournament);
-  return (await getRedisClient()).zRangeWithScores(leaderBoardKey, 0, topX, {
+  const results = await (
+    await getRedisClient()
+  ).zRangeWithScores(leaderBoardKey, 0, topX, {
     REV: true,
   });
+  const toAwait = results.map(
+    async (result: { score: number; value: string }) => {
+      const details = await getUserWalletAndTeam(result.value);
+      return { ...result, ...details };
+    }
+  );
+  return Promise.all(toAwait);
 }
 
 export function getUserKey(walletAddress: string) {
   return `user:${walletAddress}`;
 }
-const UserKeyParams = {
-  twitterHandle: "twitterHandle",
-  notifyMe: "notifyMe",
-};
 
 export async function getUserTwitterHandle(walletAddress: string) {
   const userKey = getUserKey(walletAddress);
