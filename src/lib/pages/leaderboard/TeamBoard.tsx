@@ -33,37 +33,30 @@ export const TeamBoard = ({
   };
 }) => {
   const teamScores = {
-    [TEAM_PAPER]: { value: TEAM_PAPER, score: 0 },
-    [TEAM_THIRDWEB]: { value: TEAM_THIRDWEB, score: 0 },
-    "Team Milk Road": { value: "Team Milk Road", score: 0 },
-    "Team BuildSpace": { value: "Team BuildSpace", score: 0 },
+    [TEAM_PAPER]: { value: TEAM_PAPER, score: 0, otherPlayers: 0 },
+    [TEAM_THIRDWEB]: { value: TEAM_THIRDWEB, score: 0, otherPlayers: 0 },
+    "Team Milk Road": { value: "Team Milk Road", score: 0, otherPlayers: 0 },
+    "Team BuildSpace": { value: "Team BuildSpace", score: 0, otherPlayers: 0 },
   };
   rows.forEach((row) => {
     if (!row.team) {
       // james or jake
       if (row.value === "@jameszmsun") {
-        const paper = TEAM_PAPER;
-        const result = teamScores[paper];
-        result.score = (result.score || 0) + row.score;
-        result.value = TEAM_PAPER;
-        return { ...teamScores, "Team Paper": result };
+        teamScores[TEAM_PAPER].score += row.score;
       }
       if (row.value === "@jake") {
-        const thirdweb = TEAM_THIRDWEB;
-        const result = teamScores[thirdweb];
-        result.score = (result.score || 0) + row.score;
-        result.value = TEAM_THIRDWEB;
-        return { ...teamScores, [TEAM_THIRDWEB]: result };
+        teamScores[TEAM_THIRDWEB].score += row.score;
       }
-      return undefined;
     }
     type TeamScoreKeys = keyof typeof teamScores;
-    const result = teamScores[row.team as TeamScoreKeys];
-    result.score = (result.score || 0) + row.score;
-    result.value = row.team;
-    return { ...teamScores, [row.team]: result };
+    Object.keys(teamScores).forEach((team) => {
+      if (team === row.team) {
+        teamScores[team as TeamScoreKeys].score += row.score;
+      } else {
+        teamScores[team as TeamScoreKeys].otherPlayers = 1;
+      }
+    });
   });
-
   return (
     <Stack align="center">
       <Heading textAlign="center" fontSize={{ base: "2xl", md: "3xl" }}>
@@ -76,6 +69,7 @@ export const TeamBoard = ({
             <Tr>
               <Th isNumeric>Rank</Th>
               <Th>Team</Th>
+              <Th isNumeric>Potential Team Winning</Th>
               <Th isNumeric>Score</Th>
             </Tr>
           </Thead>
@@ -90,6 +84,12 @@ export const TeamBoard = ({
                     ) : (
                       row.value
                     )}
+                  </Td>
+                  <Td isNumeric>
+                    {Intl.NumberFormat("en-US", {
+                      currency: "USD",
+                      style: "currency",
+                    }).format(row.otherPlayers * 16.83 + 52.66)}
                   </Td>
                   <Td isNumeric>{Math.round((row.score || 0) * 10) / 10}</Td>
                 </Tr>

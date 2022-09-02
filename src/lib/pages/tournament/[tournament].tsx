@@ -71,16 +71,14 @@ export const TournamentPage = ({
         {tournament.slug === "web3sf" ? (
           <>
             <Text>
-              We&apos;re doing something a little different for this event!{" "}
+              Top Team will distribute the prize pool among team members based
+              on scores
             </Text>
-            <Text>
-              The sum of everyone&apos;s score with the same NFT will determine
-              the winning group.
-            </Text>
+
             <Link href={DISCORD_LINK} isExternal>
               <u>Join our discord for the most up to date information</u>
             </Link>
-            <Text>May the best team win! Team scoreboard coming soon!</Text>
+            <Text>May the best team win!</Text>
           </>
         ) : (
           <Text>{tournament.description}</Text>
