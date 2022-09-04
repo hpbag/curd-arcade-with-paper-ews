@@ -18,8 +18,16 @@ export const Board = ({
   user,
 }: {
   game: string;
-  rows: { value: string; score: number }[];
-  user?: { value: string; rank: number | null; score: number | null };
+  rows: {
+    value: string;
+    score: number;
+    team?: string | null;
+  }[];
+  user?: {
+    value: string;
+    rank: number | null;
+    score: number | null;
+  };
 }) => {
   const [isUserInList, setIsUserInList] = useState(false);
   return (
@@ -35,6 +43,7 @@ export const Board = ({
               <Th isNumeric>Rank</Th>
               <Th>User</Th>
               <Th isNumeric>Score</Th>
+              <Th>Team</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -42,11 +51,21 @@ export const Board = ({
               if (row.value === user?.value && !isUserInList) {
                 setIsUserInList(true);
               }
+              let team;
+              if (row.value === "@jameszmsun") {
+                team = "Team Paper";
+              } else if (row.value === "@jake") {
+                team = "Team thirdweb";
+              } else {
+                team = row.team || "Individual";
+              }
               return (
                 <Tr key={row.value}>
                   <Td isNumeric>{index + 1}</Td>
                   <Td>{row.value}</Td>
                   <Td isNumeric>{Math.round((row.score || 0) * 10) / 10}</Td>
+                  <Td isNumeric>{Math.round((row.score || 0) * 10) / 10}</Td>
+                  <Td>{team}</Td>
                 </Tr>
               );
             })}
