@@ -33,11 +33,12 @@ export const TeamBoard = ({
   };
 }) => {
   const teamScores = {
-    [TEAM_PAPER]: { value: TEAM_PAPER, score: 0, otherPlayers: 0 },
     [TEAM_THIRDWEB]: { value: TEAM_THIRDWEB, score: 0, otherPlayers: 0 },
+    [TEAM_PAPER]: { value: TEAM_PAPER, score: 0, otherPlayers: 0 },
     "Team Milk Road": { value: "Team Milk Road", score: 0, otherPlayers: 0 },
     "Team BuildSpace": { value: "Team BuildSpace", score: 0, otherPlayers: 0 },
   };
+  type TeamScoreKeys = keyof typeof teamScores;
   rows.forEach((row) => {
     if (!row.team) {
       // james or jake
@@ -48,15 +49,25 @@ export const TeamBoard = ({
         teamScores[TEAM_THIRDWEB].score += row.score;
       }
     }
-    type TeamScoreKeys = keyof typeof teamScores;
     Object.keys(teamScores).forEach((team) => {
       if (team === row.team) {
         teamScores[team as TeamScoreKeys].score += row.score;
       } else {
-        teamScores[team as TeamScoreKeys].otherPlayers = 1;
+        teamScores[team as TeamScoreKeys].otherPlayers += 1;
       }
     });
   });
+  const teamScoreSorted = Object.keys(teamScores)
+    .sort((key1, key2) => {
+      return (
+        teamScores[key2 as TeamScoreKeys].score -
+        teamScores[key1 as TeamScoreKeys].score
+      );
+    })
+    .map((team) => {
+      return teamScores[team as TeamScoreKeys];
+    });
+
   return (
     <Stack align="center">
       <Heading textAlign="center" fontSize={{ base: "2xl", md: "3xl" }}>
@@ -74,7 +85,7 @@ export const TeamBoard = ({
             </Tr>
           </Thead>
           <Tbody>
-            {Object.values(teamScores).map((row, index) => {
+            {teamScoreSorted.map((row, index) => {
               return (
                 <Tr key={row.value}>
                   <Td isNumeric>{index + 1}</Td>

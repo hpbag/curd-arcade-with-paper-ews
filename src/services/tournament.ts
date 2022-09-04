@@ -27,7 +27,7 @@ export async function getTournaments() {
       treasuryAddress: "",
       tournamentLink: ROUTE_TOURNAMENT_PAGE(upcomingEventSlug),
       // dates
-      dateStart: "Mon Sept 5 2022 00:00:00 GMT-0700 (Pacific Daylight Time)",
+      dateStart: "Wed Sept 8 2022 00:00:00 GMT-0700 (Pacific Daylight Time)",
       dateEnd: "Sun Sept 11 2022 00:00:00 GMT-0700 (Pacific Daylight Time)",
       // probably do a date create, updated and deleted.
     },
@@ -43,7 +43,7 @@ export async function getTournaments() {
       treasuryAddress: "0x61c66721D9094DA3ceCED0F2C52c36c3AE94A319",
       tournamentLink: ROUTE_TOURNAMENT_PAGE(web3Slug),
       dateStart: "Sat Aug 27 2022 00:00:00 GMT-0700 (Pacific Daylight Time)",
-      dateEnd: "Sun Sept 4 2022 00:00:00 GMT-0700 (Pacific Daylight Time)",
+      dateEnd: "Tue Sept 6 2022 00:00:00 GMT-0700 (Pacific Daylight Time)",
     },
     {
       title: "BuildSpace Flap Off",
