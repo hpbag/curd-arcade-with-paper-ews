@@ -27,6 +27,7 @@ export const Board = ({
     value: string;
     rank: number | null;
     score: number | null;
+    team?: string | null;
   };
 }) => {
   const [isUserInList, setIsUserInList] = useState(false);
@@ -64,7 +65,6 @@ export const Board = ({
                   <Td isNumeric>{index + 1}</Td>
                   <Td>{row.value}</Td>
                   <Td isNumeric>{Math.round((row.score || 0) * 10) / 10}</Td>
-                  <Td isNumeric>{Math.round((row.score || 0) * 10) / 10}</Td>
                   <Td>{team}</Td>
                 </Tr>
               );
@@ -72,14 +72,16 @@ export const Board = ({
             {!isUserInList && user && (
               <>
                 <Tr>
-                  <Td isNumeric>...</Td>
                   <Td>...</Td>
-                  <Td isNumeric>...</Td>
+                  <Td>...</Td>
+                  <Td>...</Td>
+                  <Td>...</Td>
                 </Tr>
                 <Tr>
                   <Td isNumeric>{user.rank}</Td>
                   <Td>{user.value}</Td>
                   <Td isNumeric>{Math.round((user.score || 0) * 10) / 10}</Td>
+                  <Td isNumeric>{user.team}</Td>
                 </Tr>
               </>
             )}
