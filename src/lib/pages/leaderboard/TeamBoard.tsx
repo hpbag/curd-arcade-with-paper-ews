@@ -33,25 +33,26 @@ export const TeamBoard = ({
   };
 }) => {
   const teamScores = {
-    [TEAM_THIRDWEB]: { value: TEAM_THIRDWEB, score: 0, otherPlayers: 0 },
     [TEAM_PAPER]: { value: TEAM_PAPER, score: 0, otherPlayers: 0 },
+    [TEAM_THIRDWEB]: { value: TEAM_THIRDWEB, score: 0, otherPlayers: 0 },
     "Team Milk Road": { value: "Team Milk Road", score: 0, otherPlayers: 0 },
     "Team BuildSpace": { value: "Team BuildSpace", score: 0, otherPlayers: 0 },
   };
   type TeamScoreKeys = keyof typeof teamScores;
   rows.forEach((row) => {
+    const rowDuplicate = { ...row };
     if (!row.team) {
       // james or jake
-      if (row.value === "@jameszmsun") {
-        teamScores[TEAM_PAPER].score += row.score;
+      if (rowDuplicate.value === "@jameszmsun") {
+        rowDuplicate.team = TEAM_PAPER;
       }
-      if (row.value === "@jake") {
-        teamScores[TEAM_THIRDWEB].score += row.score;
+      if (rowDuplicate.value === "@jake") {
+        rowDuplicate.team = TEAM_THIRDWEB;
       }
     }
     Object.keys(teamScores).forEach((team) => {
-      if (team === row.team) {
-        teamScores[team as TeamScoreKeys].score += row.score;
+      if (team === rowDuplicate.team) {
+        teamScores[team as TeamScoreKeys].score += rowDuplicate.score;
       } else {
         teamScores[team as TeamScoreKeys].otherPlayers += 1;
       }
