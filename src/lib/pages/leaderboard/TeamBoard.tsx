@@ -53,7 +53,7 @@ export const TeamBoard = ({
     Object.keys(teamScores).forEach((team) => {
       if (team === rowDuplicate.team) {
         teamScores[team as TeamScoreKeys].score += rowDuplicate.score;
-      } else {
+      } else if (row.score) {
         teamScores[team as TeamScoreKeys].otherPlayers += 1;
       }
     });
@@ -101,7 +101,7 @@ export const TeamBoard = ({
                     {Intl.NumberFormat("en-US", {
                       currency: "USD",
                       style: "currency",
-                    }).format(row.otherPlayers * 16.83 + 52.66)}
+                    }).format(row.otherPlayers * 16.83 + 35.83)}
                   </Td>
                   <Td isNumeric>{Math.round((row.score || 0) * 10) / 10}</Td>
                 </Tr>
