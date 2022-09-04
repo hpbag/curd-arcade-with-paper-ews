@@ -18,9 +18,6 @@ if (!PUBLIC_KEY) {
 
 const stripePromise = loadStripe(PUBLIC_KEY as string);
 
-// process.env.NEXT_PUBLIC_NODE_ENV === "development"
-//     ? "http://localhost:3000"
-//     : "https://curdinc.com";
 export default function App() {
   const [clientSecret, setClientSecret] = useState("");
 

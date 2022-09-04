@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Button, useToast } from "@chakra-ui/react";
 import {
   PaymentElement,
   useElements,
@@ -6,22 +6,24 @@ import {
 } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 
+import { BASE_URL } from "lib/constants/routes";
+
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  const toast = useToast();
 
-  const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!stripe) {
+    if (!stripe || !elements) {
       return;
     }
 
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );
-    console.log("here");
+    console.log("clientSecret", clientSecret);
     if (!clientSecret) {
       return;
     }
@@ -32,20 +34,20 @@ export default function CheckoutForm() {
       }
       switch (paymentIntent.status) {
         case "succeeded":
-          setMessage("Payment succeeded!");
+          console.log("Payment succeeded!");
           break;
         case "processing":
-          setMessage("Your payment is processing.");
+          console.log("Your payment is processing.");
           break;
         case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
+          console.log("Your payment was not successful, please try again.");
           break;
         default:
-          setMessage("Something went wrong.");
+          console.log("Something went wrong.");
           break;
       }
     });
-  }, [stripe]);
+  }, [elements, stripe, toast]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -63,10 +65,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url:
-          process.env.NEXT_PUBLIC_NODE_ENV === "development"
-            ? "http://localhost:3000"
-            : "https://curdinc.com",
+        return_url: BASE_URL,
       },
     });
 
@@ -79,9 +78,21 @@ export default function CheckoutForm() {
       if (!error.message) {
         return;
       }
-      setMessage(error.message);
+      toast({
+        status: "error",
+        title: "Payment Success",
+        description: error.message,
+        isClosable: true,
+        duration: 5000,
+      });
     } else {
-      setMessage("An unexpected error occurred.");
+      toast({
+        status: "error",
+        title: "Payment Success",
+        description: "An unexpected error occurred.",
+        isClosable: true,
+        duration: 5000,
+      });
     }
 
     setIsLoading(false);
@@ -95,13 +106,11 @@ export default function CheckoutForm() {
         id="submit"
         type="submit"
         onClick={() => console.log("hi")}
+        isLoading={isLoading}
+        loadingText="Processing Payment"
       >
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner" /> : "Pay now"}
-        </span>
+        Pay now
       </Button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
     </form>
   );
 }
