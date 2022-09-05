@@ -20,12 +20,12 @@ export const getServerSideProps: GetServerSideProps<{
     props: {
       sections: [
         {
-          sectionTitle: "Upcoming Games",
-          tournaments: await getUpcomingTournaments(),
-        },
-        {
           sectionTitle: "Ongoing Games",
           tournaments: await getCurrentTournaments(),
+        },
+        {
+          sectionTitle: "Upcoming Games",
+          tournaments: await getUpcomingTournaments(),
         },
         {
           sectionTitle: "Ended Games",
