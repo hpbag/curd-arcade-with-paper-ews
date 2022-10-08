@@ -9,8 +9,9 @@ import {
   DrawerOverlay,
   Flex,
 } from "@chakra-ui/react";
+import router from "next/router";
 
-import { ThirdWebConnectWalletButton } from "lib/components/connectWallet/ThirdWebConnectWalletButton";
+import { CASHIER } from "lib/constants/routes";
 
 import ThemeToggle from "./ThemeToggle";
 
@@ -22,37 +23,38 @@ export const MobileDrawer = ({
   isOpen: boolean;
   onClose: () => void;
   buttonRef: React.RefObject<HTMLButtonElement>;
-}) => {
-  return (
-    <Drawer
-      isOpen={isOpen}
-      placement="right"
-      onClose={onClose}
-      finalFocusRef={buttonRef}
-    >
-      <DrawerOverlay />
-      <DrawerContent>
-        <DrawerCloseButton />
-        <DrawerHeader>Menu</DrawerHeader>
+}) => (
+  <Drawer
+    isOpen={isOpen}
+    placement="right"
+    onClose={onClose}
+    finalFocusRef={buttonRef}
+  >
+    <DrawerOverlay />
+    <DrawerContent>
+      <DrawerCloseButton />
+      <DrawerHeader>Menu</DrawerHeader>
 
-        <DrawerBody>
-          <Flex
-            flexDirection="column"
-            h="100%"
-            justifyContent="end"
-            align="end"
+      <DrawerBody>
+        <Flex flexDirection="column" h="100%" justifyContent="end" align="end">
+          <Button
+            px={10}
+            colorScheme="orange"
+            onClick={() => {
+              router.push(CASHIER);
+            }}
           >
-            <ThirdWebConnectWalletButton />
-          </Flex>
-        </DrawerBody>
-
-        <DrawerFooter>
-          <Button variant="outline" mr={3} onClick={onClose}>
-            Cancel
+            Cashier
           </Button>
-          <ThemeToggle />
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-};
+        </Flex>
+      </DrawerBody>
+
+      <DrawerFooter>
+        <Button variant="outline" mr={3} onClick={onClose}>
+          Cancel
+        </Button>
+        <ThemeToggle />
+      </DrawerFooter>
+    </DrawerContent>
+  </Drawer>
+);
