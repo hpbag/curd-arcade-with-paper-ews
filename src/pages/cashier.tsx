@@ -20,17 +20,19 @@ const stripePromise = loadStripe(PUBLIC_KEY as string);
 
 export default function App() {
   const [clientSecret, setClientSecret] = useState("");
+  // make it a string
+  const [token, setTokens] = useState("1");
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
     fetch("/api/payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ arcadeTokens: 5 }),
+      body: JSON.stringify({ arcadeTokens: token }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
-  }, []);
+  }, [token]);
 
   const appearance = {
     theme: "stripe",
@@ -46,8 +48,14 @@ export default function App() {
 
   return (
     <div className="App">
+      <input
+        type="text"
+        placeholder={token}
+        onChange={(e) => setTokens(e.target.value)}
+      />
+      <div id="nerd">{token}</div>
       {clientSecret && (
-        <Elements options={options} stripe={stripePromise}>
+        <Elements options={options} key={clientSecret} stripe={stripePromise}>
           <CheckoutForm />
         </Elements>
       )}
