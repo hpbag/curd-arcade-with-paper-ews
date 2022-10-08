@@ -46,13 +46,11 @@ export default function App() {
 
   return (
     <div className="App">
-      field
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />
         </Elements>
       )}
-      fool
     </div>
   );
 }

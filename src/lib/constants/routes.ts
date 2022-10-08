@@ -10,6 +10,8 @@ export const REDIS_HOST =
     ? "localhost"
     : "srv-captain--curd-casino-redis";
 
+export const CASHIER = `${BASE_URL}/cashier`;
+
 export const POLYGON_SCAN_TRANSACTION = (txHash: string) =>
   `https://polygonscan.com/tx/${txHash}`;
 
