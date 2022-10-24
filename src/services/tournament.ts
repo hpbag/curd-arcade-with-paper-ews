@@ -10,27 +10,7 @@ export const buildspaceNWSlug = "n&w-buildspace";
 
 export async function getTournaments() {
   return [
-    {
-      title: "To Be Revealed",
-      description:
-        "Big things coming. Alpha drop: Holding the previous two event's NFTs is going to help.",
-      // unique
-      slug: upcomingEventSlug,
-      imageUrl: "/tournament-logo/question-mark.png",
-      // nullable
-      participantsOverride: 0,
-      // nullable
-      prizePoolOverride: 0,
-      // do we want the next three contract address to be nullable?
-      nftContractAddress: "",
-      tokenContractAddress: "",
-      treasuryAddress: "",
-      tournamentLink: ROUTE_TOURNAMENT_PAGE(upcomingEventSlug),
-      // dates
-      dateStart: "Wed Sept 8 2022 00:00:00 GMT-0700 (Pacific Daylight Time)",
-      dateEnd: "Sun Sept 11 2022 00:00:00 GMT-0700 (Pacific Daylight Time)",
-      // probably do a date create, updated and deleted.
-    },
+   
     {
       title: "Web3Sf Speakers",
       description: `We're doing something a little different for this event! The sum of everyone's score with the same NFT will determine the winning group. What do you win? The other NFT holder's buy-in scaled according to your score. Choose wisely.`,
