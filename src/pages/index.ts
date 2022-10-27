@@ -2,9 +2,7 @@ import type { GetServerSideProps } from "next";
 
 import Home from "lib/pages/home";
 import type { Tournament } from "services/tournament";
-import {
-  getPastTournaments
-} from "services/tournament";
+import { getPastTournaments } from "services/tournament";
 
 export default Home;
 
