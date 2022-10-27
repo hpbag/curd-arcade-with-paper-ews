@@ -20,7 +20,7 @@ const GamePage = ({
   return (
     <Stack gap={5} alignItems="center">
       <Text>
-        <Kbd>Space</Kbd> or <Kbd>tap</Kbd> to jump!
+        <Kbd>Space</Kbd> or <Kbd>tap</Kbd> to jump.
       </Text>
       <div id="game-container" />
     </Stack>
