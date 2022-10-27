@@ -10,7 +10,6 @@ export const buildspaceNWSlug = "n&w-buildspace";
 
 export async function getTournaments() {
   return [
-   
     {
       title: "Web3Sf Speakers",
       description: `We're doing something a little different for this event! The sum of everyone's score with the same NFT will determine the winning group. What do you win? The other NFT holder's buy-in scaled according to your score. Choose wisely.`,
