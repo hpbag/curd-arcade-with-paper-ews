@@ -9,7 +9,7 @@
 <h2 align="center">Built On</h2>
 <p align="center">
     <a href="https://paper.xyz" style="margin-right: 50px;" ><img src="https://paper.xyz/icons/paper-logo-icon.svg" width="42" alt="curd logo" /></a>
-    <a href="https://thirdweb.com/"><img src="https://thirdweb.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fwhite-logo.52a1f32a.png&w=3840&q=90" width="100" alt="curd logo"/></a>
+    <a href="https://thirdweb.com/"><img src="https://thirdweb.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fwhite-logo.52a1f32a.png&w=3840&q=90" width="100" alt="Thirdweb logo"/></a>
 </p>
 
 ## Getting Started
