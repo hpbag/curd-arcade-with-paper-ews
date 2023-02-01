@@ -78,7 +78,7 @@ export function TournamentSection({
   tournaments: Tournament[];
 }) {
   const tournamentDisplays = tournaments.map((tournament) => {
-    return <TournamentCard {...tournament} />;
+    return <TournamentCard key={tournament.slug} {...tournament} />;
   });
   return (
     <Stack alignItems="center" w="100%" gap={8}>

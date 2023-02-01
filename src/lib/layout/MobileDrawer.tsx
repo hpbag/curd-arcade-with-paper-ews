@@ -7,11 +7,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  Flex,
 } from "@chakra-ui/react";
-import router from "next/router";
-
-import { CASHIER } from "lib/constants/routes";
 
 import ThemeToggle from "./ThemeToggle";
 
@@ -35,19 +31,7 @@ export const MobileDrawer = ({
       <DrawerCloseButton />
       <DrawerHeader>Menu</DrawerHeader>
 
-      <DrawerBody>
-        <Flex flexDirection="column" h="100%" justifyContent="end" align="end">
-          <Button
-            px={10}
-            colorScheme="orange"
-            onClick={() => {
-              router.push(CASHIER);
-            }}
-          >
-            Cashier
-          </Button>
-        </Flex>
-      </DrawerBody>
+      <DrawerBody />
 
       <DrawerFooter>
         <Button variant="outline" mr={3} onClick={onClose}>
