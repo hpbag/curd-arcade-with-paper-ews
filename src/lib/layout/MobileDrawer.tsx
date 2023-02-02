@@ -7,7 +7,10 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  Flex,
 } from "@chakra-ui/react";
+
+import { ThirdWebConnectWalletButton } from "lib/components/connectWallet/ThirdWebConnectWalletButton";
 
 import ThemeToggle from "./ThemeToggle";
 
@@ -19,26 +22,37 @@ export const MobileDrawer = ({
   isOpen: boolean;
   onClose: () => void;
   buttonRef: React.RefObject<HTMLButtonElement>;
-}) => (
-  <Drawer
-    isOpen={isOpen}
-    placement="right"
-    onClose={onClose}
-    finalFocusRef={buttonRef}
-  >
-    <DrawerOverlay />
-    <DrawerContent>
-      <DrawerCloseButton />
-      <DrawerHeader>Menu</DrawerHeader>
+}) => {
+  return (
+    <Drawer
+      isOpen={isOpen}
+      placement="right"
+      onClose={onClose}
+      finalFocusRef={buttonRef}
+    >
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerCloseButton />
+        <DrawerHeader>Menu</DrawerHeader>
 
-      <DrawerBody />
+        <DrawerBody>
+          <Flex
+            flexDirection="column"
+            h="100%"
+            justifyContent="end"
+            align="end"
+          >
+            <ThirdWebConnectWalletButton />
+          </Flex>
+        </DrawerBody>
 
-      <DrawerFooter>
-        <Button variant="outline" mr={3} onClick={onClose}>
-          Cancel
-        </Button>
-        <ThemeToggle />
-      </DrawerFooter>
-    </DrawerContent>
-  </Drawer>
-);
+        <DrawerFooter>
+          <Button variant="outline" mr={3} onClick={onClose}>
+            Cancel
+          </Button>
+          <ThemeToggle />
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
+};

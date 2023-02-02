@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 import { setNotifyMe, setUserTwitterHandle } from "services/redis";
+
+import { getUser } from "./auth/[...thirdweb]";
 
 const onBoard = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -9,7 +10,11 @@ const onBoard = async (req: NextApiRequest, res: NextApiResponse) => {
       error: "Invalid method. Only POST supported.",
     });
   }
-  const address = await getAddressFromCookies(req.cookies);
+  const user = await getUser(req);
+  if (!user) {
+    throw new Error("Not logged in");
+  }
+  const { address } = user;
   const { handle, notifyMe } = req.body;
 
   if (!handle || typeof notifyMe !== "boolean") {

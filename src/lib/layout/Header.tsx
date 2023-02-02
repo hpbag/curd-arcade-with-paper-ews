@@ -10,6 +10,8 @@ import NextLink from "next/link";
 import React from "react";
 import { HiOutlineMenu } from "react-icons/hi";
 
+import { ThirdWebConnectWalletButton } from "lib/components/connectWallet/ThirdWebConnectWalletButton";
+
 import { MobileDrawer } from "./MobileDrawer";
 import ThemeToggle from "./ThemeToggle";
 
@@ -30,6 +32,7 @@ const Header = () => {
         align="center"
         gap={2}
       >
+        <ThirdWebConnectWalletButton />
         <ThemeToggle />
       </Flex>
       <Flex

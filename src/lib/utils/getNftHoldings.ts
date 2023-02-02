@@ -5,8 +5,8 @@ export async function getNftHoldings(
   walletAddress: string
 ) {
   const sdk = new ThirdwebSDK("polygon");
-  const edition = sdk.getEditionDrop(contractAddress);
-  return edition.getOwned(walletAddress);
+  const contract = await sdk.getContract(contractAddress);
+  return contract.erc1155.getOwned(walletAddress);
 }
 
 export function getAssetName(nfts: { [key: string]: any }[]) {

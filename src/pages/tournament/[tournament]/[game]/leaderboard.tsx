@@ -8,7 +8,7 @@ import { FaDiscord } from "react-icons/fa";
 import { DISCORD_LINK, ROUTE_GAME_PAGE } from "lib/constants/routes";
 import { Board } from "lib/pages/leaderboard/Board";
 import { TeamBoard } from "lib/pages/leaderboard/TeamBoard";
-import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
+import { getUser } from "pages/api/auth/[...thirdweb]";
 import { getTournamentGamesByTournamentAndGame } from "services/games";
 import {
   getTopXScores,
@@ -88,7 +88,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   try {
-    const address = await getAddressFromCookies(context.req.cookies);
+    const user = await getUser(context.req);
+    if (!user) {
+      throw new Error("Not logged in");
+    }
+    const { address } = user;
     const handle = await getUserTwitterHandle(address || "");
     if (!handle) {
       throw new Error("Missing handle");

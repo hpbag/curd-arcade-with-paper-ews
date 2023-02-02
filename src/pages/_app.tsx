@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
-import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { DefaultSeo } from "next-seo";
 
 import { Chakra } from "lib/components/Chakra";
+import { BASE_URL } from "lib/constants/routes";
 import Layout from "lib/layout";
 import "lib/styles/globals.css";
 import defaultSEOConfig from "../../next-seo.config";
@@ -12,7 +13,14 @@ import defaultSEOConfig from "../../next-seo.config";
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const desiredChainId = ChainId.Polygon;
   return (
-    <ThirdwebProvider desiredChainId={desiredChainId}>
+    <ThirdwebProvider
+      desiredChainId={desiredChainId}
+      chainRpc={{ [desiredChainId]: "https://polygon-rpc.com" }}
+      authConfig={{
+        domain: BASE_URL,
+        authUrl: "/api/auth",
+      }}
+    >
       <Chakra>
         <Head>
           <meta

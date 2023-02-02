@@ -1,7 +1,7 @@
 import type { GetServerSideProps } from "next";
 
 import { TournamentPage } from "lib/pages/tournament/[tournament]";
-import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
+import { getUser } from "pages/api/auth/[...thirdweb]";
 import type { Game } from "services/games";
 import { getTournamentGamesByTournament } from "services/games";
 import type { Nfts } from "services/nfts";
@@ -45,7 +45,11 @@ export const getServerSideProps: GetServerSideProps<{
   const game = (await getTournamentGamesByTournament(tournament.slug))[0];
 
   try {
-    const address = await getAddressFromCookies(context.req.cookies);
+    const user = await getUser(context.req);
+    if (!user) {
+      throw new Error("Not logged in");
+    }
+    const { address } = user;
     const handle = await getUserTwitterHandle(address || "");
 
     if (!handle) {

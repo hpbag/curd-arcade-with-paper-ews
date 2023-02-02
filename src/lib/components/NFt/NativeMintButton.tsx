@@ -60,7 +60,9 @@ export function NativeMintButton({
         to: address,
         quantity: 1,
         tokenId: contractArgs.tokenId,
-        checkERC20Allowance: true,
+        options: {
+          checkERC20Allowance: true,
+        },
       },
       {
         onError(error) {
@@ -81,8 +83,7 @@ export function NativeMintButton({
         },
         onSuccess(data) {
           onSuccess();
-
-          const { transactionHash } = data.receipt;
+          const { transactionHash } = (data as any).receipt;
           toast({
             title: `Successfully minted ${title}`,
             description: (

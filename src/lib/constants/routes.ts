@@ -2,15 +2,13 @@ import type { AvailableGames } from "services/games";
 
 export const BASE_URL =
   process.env.NEXT_PUBLIC_NODE_ENV === "development"
-    ? "http://localhost:3000"
+    ? "http://localhost:3001"
     : "https://arcade.curdinc.com";
 
 export const REDIS_HOST =
   process.env.NEXT_PUBLIC_NODE_ENV === "development"
     ? "localhost"
     : "srv-captain--curd-casino-redis";
-
-export const CASHIER = `${BASE_URL}/cashier`;
 
 export const POLYGON_SCAN_TRANSACTION = (txHash: string) =>
   `https://polygonscan.com/tx/${txHash}`;

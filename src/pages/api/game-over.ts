@@ -2,8 +2,9 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { getAssetName } from "lib/utils/getNftHoldings";
-import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
 import { getUserTwitterHandle, setLeaderScore } from "services/redis";
+
+import { getUser } from "./auth/[...thirdweb]";
 
 const gameOver = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -11,15 +12,18 @@ const gameOver = async (req: NextApiRequest, res: NextApiResponse) => {
       error: "Invalid method. Only POST supported.",
     });
   }
-
-  const address = await getAddressFromCookies(req.cookies);
+  const user = await getUser(req);
+  if (!user) {
+    throw new Error("Not logged in");
+  }
+  const { address } = user;
   const thirdwebSdk = new ThirdwebSDK("polygon");
-  const editionDrop = thirdwebSdk.getEditionDrop(
+  const editionDrop = await thirdwebSdk.getEditionDrop(
     "0xC50Ee7a95AEcEb509f305AAff326481001A5D5b6"
   );
   const ownedNfts = await editionDrop.getOwned(address);
 
-  const web3SfEditionDrop = thirdwebSdk.getEditionDrop(
+  const web3SfEditionDrop = await thirdwebSdk.getEditionDrop(
     "0x96559A1c39Ba491cb2b94A40CCee7Bb8DAdd574F"
   );
   const gameNfts = await web3SfEditionDrop.getOwned(address);

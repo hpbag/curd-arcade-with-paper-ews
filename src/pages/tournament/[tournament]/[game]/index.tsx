@@ -5,7 +5,7 @@ import { z } from "zod";
 import { useFlappyBirdGame } from "lib/components/flappyBird/useGame";
 import { ROUTE_TOURNAMENT_PAGE } from "lib/constants/routes";
 import { getAssetName, getNftHoldings } from "lib/utils/getNftHoldings";
-import { getAddressFromCookies } from "lib/utils/getWalletFromReq";
+import { getUser } from "pages/api/auth/[...thirdweb]";
 import {
   AvailableGames,
   getTournamentGamesByTournamentAndGame,
@@ -58,7 +58,12 @@ export const getServerSideProps: GetServerSideProps<{
   );
 
   try {
-    const address = await getAddressFromCookies(context.req.cookies);
+    const user = await getUser(context.req);
+    if (!user) {
+      throw new Error("Not logged in");
+    }
+    const { address } = user;
+    console.log("address", address);
     if (await isNewUser(address)) {
       return {
         redirect: {
@@ -69,6 +74,7 @@ export const getServerSideProps: GetServerSideProps<{
     }
 
     const nfts = await getNftHoldings(tournament.nftContractAddress, address);
+    console.log("nfts", nfts);
     if (nfts.length === 0) {
       return {
         redirect: {
