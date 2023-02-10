@@ -23,10 +23,13 @@ const gameOver = async (req: NextApiRequest, res: NextApiResponse) => {
   );
   const ownedNfts = await editionDrop.getOwned(address);
 
-  const web3SfEditionDrop = await thirdwebSdk.getEditionDrop(
+  const paperEWSEditionDrop = await thirdwebSdk.getEditionDrop(
     "0x96559A1c39Ba491cb2b94A40CCee7Bb8DAdd574F"
   );
-  const gameNfts = await web3SfEditionDrop.getOwned(address);
+  const web3SfEditionDrop = await thirdwebSdk.getEditionDrop(
+    "0x78A3b221390a4b0224A441A8e3ECEB42faC40eB1"
+  );
+  const gameNfts = await paperEWSEditionDrop.getOwned(address);
   const name = getAssetName(gameNfts);
   let team = "";
   switch (name) {

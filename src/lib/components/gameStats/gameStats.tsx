@@ -37,17 +37,9 @@ export const GameStats = ({
       const fetchBalance = await token?.balanceOf(treasuryAddress);
       const tokenOneSupply =
         (await editionDrop?.totalSupply(0)) || ethers.BigNumber.from(0);
-      const tokenTwoSupply =
-        (await editionDrop?.totalSupply(1)) || ethers.BigNumber.from(0);
-      const tokenThreeSupply =
-        (await editionDrop?.totalSupply(2)) || ethers.BigNumber.from(0);
-      const tokenFourSupply =
-        (await editionDrop?.totalSupply(3)) || ethers.BigNumber.from(0);
 
       return {
-        participants: tokenOneSupply.add(
-          tokenTwoSupply.add(tokenThreeSupply.add(tokenFourSupply))
-        ),
+        participants: tokenOneSupply,
         balance: fetchBalance,
       };
     };

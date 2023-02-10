@@ -89,6 +89,7 @@ export const getServerSideProps: GetServerSideProps<{
     console.log(assetUrl);
     return { props: { imageLink: assetUrl } };
   } catch (e) {
+    console.log(e);
     return {
       redirect: {
         destination: `/login?redirect=${pathToComeBackTo}`,

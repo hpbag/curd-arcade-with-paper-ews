@@ -7,11 +7,19 @@ import {
   Stack,
   Text,
   useToast,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { isAfter, isBefore } from "date-fns";
 import type { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Board } from "../leaderboard/Board";
 import { TeamBoard } from "../leaderboard/TeamBoard";
@@ -48,6 +56,30 @@ export const TournamentPage = ({
   const startDate = new Date(tournament.dateStart);
   const endDate = new Date(tournament.dateEnd);
   const now = new Date();
+  // eslint-disable-next-line no-promise-executor-return
+  const [isLoading, setIsLoading] = useState(false);
+  const [signed, setSigned] = useState(false);
+  const imageUrl = "/character-images/james.png";
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  useEffect(() => {
+    if (signed) {
+      toast({
+        title: "Signature Accepted.",
+        description: "NFT Metadata has been successfully updated to new high score of 63!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signed]);
 
   return (
     <Flex flexDirection="column" gap={10}>
@@ -85,13 +117,48 @@ export const TournamentPage = ({
         )}
       </Flex>
 
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
+        <ModalContent>
+          <ModalHeader>New High Score! 🥳</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Stack align="center">
+              <Text fontSize="4xl">63</Text>
+              <Image rounded="lg" src={imageUrl} maxW={52} />
+            </Stack>
+            <Text mt={4}>Update your NFT Metadata to record your new high score.</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              loadingText="Signing Transaction..."
+              isLoading={isLoading}
+              onClick={async () => {
+                try {
+                  setIsLoading(true);
+                  await delay(3000);
+                  setIsLoading(false);
+                  setSigned(true);
+                } catch (e) {
+                  setIsLoading(false);
+                }
+              }}
+            >
+              {signed ? "Close" : "Update Metadata"}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <Stack alignItems="center" gap={4}>
         {isBefore(startDate, now) && isAfter(endDate, now) ? (
           <Button
             px={10}
             colorScheme="orange"
-            onClick={() => {
-              router.push(ROUTE_GAME_PAGE(tournament.slug, game.slug));
+            onClick={async () => {
+              // router.push(ROUTE_GAME_PAGE(tournament.slug, game.slug));
+              await delay(3000);
+              onOpen();
             }}
           >
             Play Now

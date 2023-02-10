@@ -60,6 +60,13 @@ export async function getNfts() {
       paperId: "d87ce02a-4f9c-45cd-a090-238ec747404b",
       contractArgs: { tokenId: 3 },
     },
+    {
+      contractAddress: "0x78A3b221390a4b0224A441A8e3ECEB42faC40eB1",
+      imageUrl: ROUTE_NFT_IMAGE_PREVIEW(`james.webp`),
+      title: "James from Paper",
+      paperId: "2c969ccf-6508-4c98-9de5-4fe296bec749",
+      contractArgs: { tokenId: 0 },
+    },
   ];
 }
 

@@ -2,7 +2,7 @@ import type { AvailableGames } from "services/games";
 
 export const BASE_URL =
   process.env.NEXT_PUBLIC_NODE_ENV === "development"
-    ? "http://localhost:3001"
+    ? "http://localhost:3000"
     : "https://arcade.curdinc.com";
 
 export const REDIS_HOST =
